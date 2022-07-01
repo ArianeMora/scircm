@@ -1,9 +1,102 @@
 # sci-RegulatoryClusteringModel
-[![codecov.io](https://codecov.io/github/ArianeMora/scircm/coverage.svg?branch=master)](https://codecov.io/github/ArianeMora/scircm?branch=master)
 [![PyPI](https://img.shields.io/pypi/v/scircm)](https://pypi.org/project/scircm/)
-[![DOI](https://zenodo.org/badge/316410924.svg)](https://zenodo.org/badge/latestdoi/316410924)
 
-[Link to docs](https://arianemora.github.io/scircm/)
+
+## Install
+
+``` 
+pip install scircm
+```
+Note we expect python 3.6 or above :) 
+
+## Run
+
+#### Quick version
+```
+from scircm import SciRCM
+prot_file = f'path to the output from protein differential abundence file'
+rna_file = f'path to the output from differential expression analysis file'
+meth_file = f'path to the output from methylation DCpG analysis file'
+# Note we assume your methylation CpGs map to a single gene, if they don't see the section below.
+
+rcm = SciRCM(meth_file, rna_file, prot_file, 
+             "logFC_rna", "padj_rna", "CpG_Beta_diff", "padj_meth", "logFC_protein", "padj_protein",
+             "ensembl_gene_id", sep=',',
+             rna_padj_cutoff=0.05, 
+             prot_padj_cutoff=0.05, 
+             meth_padj_cutoff=0.05,
+             rna_logfc_cutoff=1.0, 
+             prot_logfc_cutoff=0.5, 
+             meth_diff_cutoff=0.1, 
+             output_dir='',
+             non_coding_genes=['None'],
+             output_filename='RCM_Output.csv',
+             bg_type = '(P&M)|(P&R)|(M&R)'
+         )
+rcm.run()
+df = rcm.get_df()
+# That DF now has your rcm clustering results, how easy was that :D
+```
+#### Making your CpGs map to a single gene version
+```
+from scircm import filter_methylation_data_by_genes
+meth_df = pd.read_csv(f'path to the output from methylation DCpG analysis file')
+# Note: you need to pass it: 
+# 1) the gene ID column, here it is 'ensembl_gene_id'
+# 2) the padj column: here it is 'padj_meth'
+# 3) the logFC or test statistic column: here it is 'CpG_Beta_diff'
+filtered_meth_df = filter_methylation_data_by_genes(meth_df, 'ensembl_gene_id', 'padj_meth', 'CpG_Beta_diff')
+```
+Now you can run the first version :) 
+
+#### R version
+
+If you don't have conda, you'll need to do the below, first make sure you have reticulate installed. 
+```
+install.packages('reticulate')
+```
+Create a new environment and install scircm.
+```
+virtualenv_create(
+      envname = "ml",
+      python = NULL,
+      packages = "scircm",
+      system_site_packages = getOption("reticulate.virtualenv.system_site_packages",
+                                       default = FALSE)
+    )
+```
+Then run the following script!
+
+```
+library(tidyverse) # install these if you don't have them
+library(dplyr)
+library(reticulate)
+
+# If things fail here it's because you need to the steps above
+use_condaenv("ml", required = TRUE) # OR use_virtualenv("ml", required = TRUE)  # depending on how you installed it!
+scircm <<- import("scircm")    # Make global
+
+prot_file <- 'path to the output from protein differential abundence file'
+rna_file <- 'path to the output from differential expression analysis file'
+meth_file <- 'path to the output from methylation DCpG analysis file'
+
+rcm = scircm$SciRCM(meth_file, rna_file, prot_file, 
+             "logFC_rna", "padj_rna", "CpG_Beta_diff", "padj_meth", "logFC_protein", "padj_protein",
+             "ensembl_gene_id", sep=',',
+             rna_padj_cutoff=0.05, 
+             prot_padj_cutoff=0.05, 
+             meth_padj_cutoff=0.05,
+             rna_logfc_cutoff=1.0, 
+             prot_logfc_cutoff=0.5, 
+             meth_diff_cutoff=0.1, 
+             output_dir='',
+             non_coding_genes=['None'],
+             output_filename='RCM_Output.csv',
+             bg_type = '(P&M)|(P&R)|(M&R)'
+         )
+rcm$run()
+df <- rcm$get_df()
+```
 
 ## Regulatory clustering model 
 
