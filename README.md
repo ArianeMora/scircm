@@ -14,10 +14,18 @@ Note we expect python 3.6 or above :)
 #### Quick version
 ```
 from scircm import SciRCM
+# FORMAT must be csv :) 
 prot_file = f'path to the output from protein differential abundence file'
 rna_file = f'path to the output from differential expression analysis file'
 meth_file = f'path to the output from methylation DCpG analysis file'
+
 # Note we assume your methylation CpGs map to a single gene, if they don't see the section below.
+# logFC_rna = column name in your RNA file that has your RNA logFC (same for the protein and CpG)
+# padj_rna = column name in your RNA file that has your padj value (same for protein and CpG)
+# NOTE: these need to be unique from one another since we merge the datasets, if they aren't, you need
+# to update your csv files.
+# Lastly: ensembl_gene_id this is the gene ID column, All must use the same identifier, and this must be
+# labelled the same in each file, if it isn't, update your column names before running.
 
 rcm = SciRCM(meth_file, rna_file, prot_file, 
              "logFC_rna", "padj_rna", "CpG_Beta_diff", "padj_meth", "logFC_protein", "padj_protein",
