@@ -63,15 +63,7 @@ filtered_meth_df = filter_methylation_data_by_genes(meth_df, 'ensembl_gene_id', 
 ```
 Now you can run the first version :) 
 
-#### Running the examples in jupyter notebook
-You'll need to install jupyter to do this, 
-```
-pip install notebook
-```
-Go into the examples folder, and run:
-```
-jupyter notebook
-```
+
 #### R version
 
 If you don't have conda, you'll need to do the below, first make sure you have reticulate installed. 

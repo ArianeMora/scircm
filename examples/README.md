@@ -1,5 +1,17 @@
 # Tutorials
 
+#### Running the examples in jupyter notebook
+
+You'll need to install jupyter to do this, 
+```
+pip install notebook
+```
+
+Now if you're in the examples folder, and run:
+```
+jupyter notebook
+```
+
 Here we will update tutorials as we develop more. At the moment I have COVID and it is the weekend so only going to make 
 one in time for our pre-print to be released (then go do some painting and make some soup).  
 
