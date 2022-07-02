@@ -351,7 +351,7 @@ class RCMStats:
         # Yay they did good.
         return True
 
-    def run_vae_stats(self, cond_label: str, cond0: str, cond1: str, label='', selected_cases=None):
+    def run_vae_stats(self, cond_label: str, cond0: str, cond1: str, label='', selected_cases=None, test_type='mannwhitneyu'):
         """
         Run stats comparing samples with condition 1 vs condition 0, the cond_label column. This is a column
         that must be present in all the sample data frames (for example, "gender" or "stage).
@@ -404,7 +404,7 @@ class RCMStats:
 
             # cond_0_encodings = {case_id: [encoded_data[case_id].values] for case_id in cond0_cases}
             # cond_1_encodings = {case_id: [encoded_data[case_id].values] for case_id in cond1_cases}
-            stats_df = self.make_stats_df(test_type='mannwhitneyu', id_vals=encoded_data['id'].values,
+            stats_df = self.make_stats_df(test_type=test_type, id_vals=encoded_data['id'].values,
                                           cond_1_encodings=encoded_data[cond1_cases],
                                           cond_0_encodings=encoded_data[cond0_cases],
                                           column_to_align_to=cols_to_align,

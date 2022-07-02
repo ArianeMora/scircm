@@ -3,13 +3,19 @@
 
 
 ## Install
+Optionally create a new conda env.
+```
+conda create --name scircm python=3.8
+conda activate scircm
+```
 
 ``` 
 pip install scircm
 ```
-Note we expect python 3.6 or above :) 
+Note we expect python 3.8 so if things don't work first time, check you're running python 3.8 and then try again :) 
 
 ## Run
+See the examples folder for a proper tutorial with data included that you can run!
 
 #### Quick version
 ```
@@ -57,6 +63,15 @@ filtered_meth_df = filter_methylation_data_by_genes(meth_df, 'ensembl_gene_id', 
 ```
 Now you can run the first version :) 
 
+#### Running the examples in jupyter notebook
+You'll need to install jupyter to do this, 
+```
+pip install notebook
+```
+Go into the examples folder, and run:
+```
+jupyter notebook
+```
 #### R version
 
 If you don't have conda, you'll need to do the below, first make sure you have reticulate installed. 
