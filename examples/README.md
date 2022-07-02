@@ -12,8 +12,7 @@ Now if you're in the examples folder, and run:
 jupyter notebook
 ```
 
-Here we will update tutorials as we develop more. At the moment I have COVID and it is the weekend so only going to make 
-one in time for our pre-print to be released (then go do some painting and make some soup).  
+Here we will update tutorials as we develop more, most likely in the next few weeks :)  
 
 This tutorial runs through the SiRCle clustering on patients that we have already performed differential analysis on.
 We won't be releasing tutorials on these steps as you can go to one of the many already great tutorials in R on how
