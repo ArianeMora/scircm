@@ -33,11 +33,16 @@ class RCMStats:
     used as input to calculating statistics on the DS.
     """
 
-    def __init__(self, rcm_file: str, patient_sample_file : str,
-                 meth_file: str, meth_sample_file: str,
-                 rna_file: str, rna_sample_file: str,
-                 protein_file: str, protein_sample_file: str,
-                 output_folder: str, condition_column: str,
+    def __init__(self, rcm_file: str,
+                 patient_sample_file : str,
+                 meth_file: str,
+                 meth_sample_file: str,
+                 rna_file: str,
+                 rna_sample_file: str,
+                 protein_file: str,
+                 protein_sample_file: str,
+                 output_folder: str,
+                 condition_column: str,
                  column_id: str,
                  patient_id_column: str,
                  config_file: str = None,

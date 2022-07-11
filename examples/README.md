@@ -1,6 +1,10 @@
 # Tutorials
 
-#### Running the examples in jupyter notebook
+#### R tutorial 
+The R tutorial (TutorialR.Rmd) is designed to run in R-studio. Just double click and run through the code :) 
+
+
+#### Running the python examples in jupyter notebook
 
 You'll need to install jupyter to do this, 
 ```
@@ -15,6 +19,7 @@ jupyter notebook
 Here we will update tutorials as we develop more, most likely in the next few weeks :)  
 
 This tutorial runs through the SiRCle clustering on patients that we have already performed differential analysis on.
+
 We won't be releasing tutorials on these steps as you can go to one of the many already great tutorials in R on how
  to find DEGs in R, etc.  
 
@@ -22,7 +27,6 @@ We also show a very simple example on how to run the comparison on two patient g
 
 Lastly, this is the list of tutorials we're planning on releasing:  
 
-1. Tutorial 1 but in R (our R package just needs some more testing)  
 2. More in depth/figures to do QC on your results   
 3. Some VAE fun (this will be a deep dive into the VAE component)  
 
