@@ -96,3 +96,25 @@ sv <- makeSircleStatModel(rcmFile, patientSampleFile, methFile, methSampleFile, 
 # Now you can run stats
 statsDf <- runSircleStats(sv, "gender", "Female", "Male")
 statsDf[statsDf['Integrated pval (Male-Female)'] < 0.05] # E.g we can look at things now
+
+```
+
+### TF analysis using Dorothea
+
+```{r}
+# TF analysis
+doroFile <- paste0(data_dir, 'dorothea_hs_ABCD.csv')
+TFPadjCol <- 'padj_rna'
+TFValueCol <- 'logFC_rna'
+TargetPadjCol <- 'padj_rna'
+TargetValueCol <- 'logFC_rna'
+sircleRCMFilename <- paste0(data_dir, 'RCM.csv')
+outputDir <- data_dir
+clusterGeneId <- "external_gene_name" # This has to match the gene names in doro file
+m_df <- sircleMotif(clusterGeneId, doroFile, sircleRCMFilename, TFPadjCol, TFValueCol, TargetPadjCol, TargetValueCol, "Regulation_Grouping_2",
+                     doroLevel=c("A"), clusters=c("TMDE", "TMDS", "MDS", "MDE", "TPDE", "TPDS"), TFInDataset=F, outputDir=data_dir, plotOn=T)
+
+
+```
+
+
