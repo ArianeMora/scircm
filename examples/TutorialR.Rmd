@@ -34,7 +34,7 @@ library(sircle)
 Note we assume your methylation CpGs map to a single gene, if they don't  you'll need to filter them.
 
 ```{r}
-data_dir <- '../data/'
+data_dir <- 'data/'
 
 protFile <- paste0(data_dir, 'prot_DE_Stage IV_sircle.csv')
 rnaFile <- paste0(data_dir, 'rna_DE_Stage IV_sircle_renamed-cols.csv')
@@ -69,16 +69,34 @@ Here we train (or load from saved) a VAE and then perform a comparison on two gr
 
 ```{r}
 # VAE on two groups
-proteinFile <- paste0(data_dir, 'CPTAC_protein.csv')
-methFile <- paste0(data_dir, 'CPTAC_cpg.csv')
-rnaFile <- paste0(data_dir, 'CPTAC_rna.csv')
-rcmFile <- paste0(data_dir, 'RCM.csv')
+
+rcmFile <- sircleFileName
+
+rcm_df <- read.csv(sircleFileName)
+rcm_df <- rcm_df[, 2:ncol(rcm_df)]  # Need to have the ensembl gene ID as the first column
+write.csv(rcm_df, sircleFileName, row.names=FALSE)
 
 proteinSampleFile <- paste0(data_dir, "prot_sample_data_Stage IV_sircle.csv")
 methSampleFile <- paste0(data_dir, "cpg_sample_data_Stage IV_sircle.csv")
 rnaSampleFile <- paste0(data_dir, "rna_sample_data_Stage IV_sircle.csv")
-
 patientSampleFile <- paste0(data_dir, "clinical_CPTAC_TCGA.csv") # Should include all patients
+
+# We need to get the columns we're interested from the RCM file for each 
+# this is just also so we can look at the CSV files separately.
+proteinSamples <- read.csv(proteinSampleFile)
+rnaSamples <- read.csv(rnaSampleFile)
+methSamples <- read.csv(methSampleFile)
+
+# Save each output to a csv file 
+proteinFile <- paste0(data_dir, 'CPTAC_protein_S4.csv')
+methFile <- paste0(data_dir, 'CPTAC_cpg_S4.csv')
+rnaFile <- paste0(data_dir, 'CPTAC_RNA_S4.csv')
+
+# Again need to have the ensembl gene ID as the first column
+write.csv(rcm_df[, c(geneId, proteinSamples$FullLabel)],  paste0(data_dir, 'CPTAC_protein_S4.csv'), row.names=FALSE)
+write.csv(rcm_df[, c(geneId, methSamples$FullLabel)], paste0(data_dir, 'CPTAC_cpg_S4.csv'), row.names=FALSE)
+write.csv(rcm_df[, c(geneId, rnaSamples$FullLabel)], paste0(data_dir, 'CPTAC_RNA_S4.csv'), row.names=FALSE)
+
 sampleLabelColumn <- "FullLabel"
 conditionColumn <- "CondId"
 patientIdColumn <- "SafeCases"
