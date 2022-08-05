@@ -65,8 +65,9 @@ Now you can run the first version :)
 
 
 #### R version
+First install Rtools if you haven't done this yet. There are different versions (windows: https://cran.r-project.org/bin/windows/Rtools/, macOS: https://cran.r-project.org/bin/macosx/tools/)
+If you don't have conda, you'll need to do the below, first make sure you have reticulate installed.
 
-If you don't have conda, you'll need to do the below, first make sure you have reticulate installed. 
 ```
 install.packages('reticulate')
 ```
