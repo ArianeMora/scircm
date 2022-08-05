@@ -17,6 +17,8 @@ Note we expect python 3.8 so if things don't work first time, check you're runni
 ## Run
 See the examples folder for a proper tutorial with data included that you can run!
 
+*If you have any troubles running the tutorial on a windows machine, please let us know and we can help to sort out any issues. 
+
 #### Quick version
 ```
 from scircm import SciRCM
