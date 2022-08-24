@@ -117,7 +117,12 @@ class TestSciRCM(TestClass):
             if true_labels[i]:  # Otherwise we'd be testing between 0 and null
                 print(genes[i], i, tst_label, true_labels[i])
                 # Since we don't pass a non-coding gene list we need to ensure that it == None
-                assert true_labels[i].replace('+', '_') == tst_label
+                if '+' in true_labels[i]:
+                    assert true_labels[i].split('+')[0] == tst_label.split('_')[0]
+                    assert true_labels[i].split('+')[1] == tst_label.split('_')[1]
+                else:
+                    assert true_labels[i].split('+')[0] == tst_label.split('_')[0]
+                print(true_labels[i].replace('+', '_'), tst_label)
             else:
                 assert tst_label == "None"
 
@@ -155,20 +160,6 @@ class TestSciRCM(TestClass):
                 assert true_labels[i] == tst_label
             else:
                 assert tst_label == "None"
-
-    def test_fill_protein(self):
-        rcm = SciRCM(self.meth_file, self.rna_file, self.prot_file, "logFC_r", "padj_r", "logFC_m", "padj_m",
-                     "logFC_p", "padj_p", "gene_name", sep=',',
-                     rna_padj_cutoff=0.05, prot_padj_cutoff=0.05, meth_padj_cutoff=0.05,
-                     rna_logfc_cutoff=0.5, prot_logfc_cutoff=0.1, meth_diff_cutoff=10,
-                     )
-        rcm.run(fill_protein=True, protein_cols=["prot_1", "prot_2"])
-        # Read in the output file
-        df = rcm.get_df()
-        for v in df['prot_1'].values:
-            assert v > 0
-        for v in df['prot_2'].values:
-            assert v > 0
 
     def test_nc_genes(self):
         nc_df = pd.read_csv(os.path.join(self.data_dir, 'hsapiens_go_non-coding_14122020.csv'))
