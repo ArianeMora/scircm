@@ -835,18 +835,23 @@ class RCMStats:
         return vae_m
 
     def get_decoding(self, reg_label):
-        vae_m = self.trained_vae[reg_label]
-        # Get the encoded data for that label
-        encoding = self.encoded_df[reg_label]
-        decoding_df = encoding[['id', self.regulatory_label]].copy()
-        for column in encoding.columns:
-            if column != 'id' and column != self.regulatory_label:
-                encoding_vals = encoding[column].values
-                decoding = vae_m.decoder.predict(np.array([np.array(c) for c in encoding_vals]))
-                # The decoding will be in the same format as what we in
-                for i, c in enumerate(self.feature_columns):
-                    decoding_df[f'{column}_{c}'] = decoding[:, i]
-        return decoding_df
+        if not self.trained_vae.get(reg_label):
+            self.u.err_p(['That regulatory label:', reg_label, 'did not exist in your dataset, please check the csv'
+                                                               'file to make sure it exists.',
+                          'Regulatory labels in your dataset:', list(self.trained_vae.keys())])
+        else:
+            vae_m = self.trained_vae[reg_label]
+            # Get the encoded data for that label
+            encoding = self.encoded_df[reg_label]
+            decoding_df = encoding[['id', self.regulatory_label]].copy()
+            for column in encoding.columns:
+                if column != 'id' and column != self.regulatory_label:
+                    encoding_vals = encoding[column].values
+                    decoding = vae_m.decoder.predict(np.array([np.array(c) for c in encoding_vals]))
+                    # The decoding will be in the same format as what we in
+                    for i, c in enumerate(self.feature_columns):
+                        decoding_df[f'{column}_{c}'] = decoding[:, i]
+            return decoding_df
 
     def get_encoding(self, input_df, reg_label):
         # Do this for each case, and then save as a DF for this cluster
