@@ -1,6 +1,10 @@
 # sci-RegulatoryClusteringModel
 [![PyPI](https://img.shields.io/pypi/v/scircm)](https://pypi.org/project/scircm/)
 
+## Python version
+This is all for the python version of our package, if you are interested in the R version please go here: https://github.com/ArianeMora/SiRCleR
+
+If you want to read more about how SiRCle works, please check out our paper: https://www.biorxiv.org/content/10.1101/2022.07.02.498058v1 
 
 ## Install
 Optionally create a new conda env.
@@ -12,6 +16,19 @@ conda activate scircm
 ``` 
 pip install scircm
 ```
+
+### Note on Mac M1
+Unfortunately, the Mac M1 has some issues with tensorflow, so we have not been able to get our package to work on a M1 
+mac yet. If you get it working please let us know your solution as others may benefit!
+
+### Note on Windows
+We have tested our code on Windows (10) and Mac (pro) computers, I'm not sure how it would go on a Windows 7 machine so 
+if you have issues post an issue.
+
+### Note on libraries/dependenices
+If you find that things don't install please let us know! We've done our best to make it reproducible but different 
+environments may mess things up so we're happy to help you debug, just post an issue on the github.
+
 Note we expect python 3.8 so if things don't work first time, check you're running python 3.8 and then try again :) 
 
 ## Run
