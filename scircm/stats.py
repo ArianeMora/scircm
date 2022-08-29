@@ -213,6 +213,27 @@ class RCMStats:
         # Part 2.
         if not self.check_cols_exist():
             return
+
+        # Part 3. Check for duplicates
+        if len(self.protein_data[self.protein_data.index.duplicated()]) > 0:
+            num_dups = len(self.protein_data[self.protein_data.index.duplicated()])
+            self.u.warn_p(['Protein dataset contained duplicates! Dropping duplicate IDs, note you should do this '
+                           'before running SiRCle. We have just dropped it and kept the first entry. You had: ',
+                           num_dups, 'duplicates.'])
+            self.protein_data = self.protein_data[~self.protein_data.index.duplicated(keep='first')]
+        if len(self.rna_data[self.rna_data.index.duplicated()]):
+            num_dups = len(self.rna_data[self.rna_data.index.duplicated()])
+            self.u.warn_p(['RNA dataset contained duplicates! Dropping duplicate IDs, note you should do this '
+                           'before running SiRCle. We have just dropped it and kept the first entry. You had: ',
+                           num_dups, 'duplicates.'])
+            self.rna_data = self.rna_data[~self.rna_data.index.duplicated(keep='first')]
+        if len(self.meth_data[self.meth_data.index.duplicated()]) > 0:
+            num_dups = len(self.meth_data[self.meth_data.index.duplicated()])
+            self.u.warn_p(['DNA Methylation dataset contained duplicates! Dropping duplicate IDs,'
+                           ' note you should do this before running SiRCle. We have just dropped it and '
+                           'kept the first entry You had: ',
+                           num_dups, 'duplicates.'])
+            self.meth_data = self.meth_data[~self.meth_data.index.duplicated(keep='first')]
         self.build_sample_df()
 
     def get_sample_column(self, sample_df, case_id, condition_id):
