@@ -138,29 +138,6 @@ class TestSciRCM(TestClass):
             else:
                 assert tst_label == "None"
 
-    def test_no_prot(self):
-        """
-        Test when we have no protein file.
-        """
-        rcm = SciRCMnp(f'{self.data_dir}/meth_rcm_np.csv', f'{self.data_dir}/rna_rcm_np.csv',
-                      "rna_logfc", "rna_padj", "meth_diff", "meth_padj",
-                      "gene_name", sep=',', bg_type='M&R',
-                      rna_padj_cutoff=0.05, meth_padj_cutoff=0.05,
-                      rna_logfc_cutoff=0.5, meth_diff_cutoff=10)
-
-        rcm.run()
-        # Read in the output file
-        df = rcm.get_df()
-        # Check the "label" column equals the reg label column
-        true_labels = df['Regulation_Grouping2_true'].values  # Need to add a true one
-        genes = df['gene_name'].values
-        for i, tst_label in enumerate(df[rcm.main_reg_label].values):
-            if true_labels[i]:  # Otherwise we'd be testing between 0 and null
-                print(genes[i], i, tst_label, true_labels[i])
-                assert true_labels[i] == tst_label
-            else:
-                assert tst_label == "None"
-
     def test_nc_genes(self):
         nc_df = pd.read_csv(os.path.join(self.data_dir, 'hsapiens_go_non-coding_14122020.csv'))
         nc_genes = list(nc_df['Name'].values)
