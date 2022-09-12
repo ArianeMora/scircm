@@ -137,26 +137,26 @@ class SciRCM:
     def run(self):
         # First check for duplicates in IDs and drop if there are any
         if len(self.prot_df[self.prot_df[self.gene_id].duplicated()]) > 0:
-            num_dups = len(self.prot_df[self.prot_df.gene_id.duplicated()])
+            num_dups = len(self.prot_df[self.prot_df[self.gene_id].duplicated()])
             self.u.warn_p(['Protein dataset contained duplicates based on ID! Dropping duplicate IDs,'
                            ' note you should do this '
                            'before running SiRCle. We have just dropped it and kept the first entry. You had: ',
                            num_dups, 'duplicates.'])
             self.prot_df = self.prot_df[~self.prot_df[self.gene_id].duplicated(keep='first')]
         if len(self.rna_df[self.rna_df[self.gene_id].duplicated()]) > 0:
-            num_dups = len(self.rna_df[self.prot_df.gene_id.duplicated()])
+            num_dups = len(self.rna_df[self.rna_df[self.gene_id].duplicated()])
             self.u.warn_p(['RNAseq dataset contained duplicates based on ID! Dropping duplicate IDs,'
                            ' note you should do this '
                            'before running SiRCle. We have just dropped it and kept the first entry. You had: ',
                            num_dups, 'duplicates.'])
             self.rna_df = self.rna_df[~self.rna_df[self.gene_id].duplicated(keep='first')]
         if len(self.meth_df[self.meth_df[self.gene_id].duplicated()]) > 0:
-            num_dups = len(self.meth_df[self.meth_df.gene_id.duplicated()])
+            num_dups = len(self.meth_df[self.meth_df[self.gene_id].duplicated()])
             self.u.warn_p(['Methylation dataset contained duplicates based on ID! Dropping duplicate IDs,'
                            ' note you should do this '
                            'before running SiRCle. We have just dropped it and kept the first entry. You had: ',
                            num_dups, 'duplicates.'])
-            self.prot_df = self.meth_df[~self.meth_df[self.gene_id].duplicated(keep='first')]
+            self.meth_df = self.meth_df[~self.meth_df[self.gene_id].duplicated(keep='first')]
 
         # Merge the dataframes together
         self.merge_dfs()

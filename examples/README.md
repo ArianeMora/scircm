@@ -1,8 +1,8 @@
 # Tutorials
 
 #### R tutorial 
-The R tutorial (TutorialR.Rmd) is designed to run in R-studio. Just double click and run through the code :) 
-
+if you are interested in the R version please go here: https://github.com/ArianeMora/SiRCleR or if you have a mac M1
+chip please go to: https://github.com/ArianeMora/SiRCleR_M1
 
 #### Running the python examples in jupyter notebook
 

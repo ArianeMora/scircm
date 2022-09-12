@@ -19,7 +19,9 @@ pip install scircm
 
 ### Note on Mac M1
 Unfortunately, the Mac M1 has some issues with tensorflow, so we have not been able to get our package to work on a M1 
-mac yet. If you get it working please let us know your solution as others may benefit!
+mac yet. If you get it working please let us know your solution as others may benefit! We have a partial M1 version
+(that covers the regulatory clustering) but doesn't enable the group statistics, if you are only interested in part 1 
+of SiRCle please go here: https://github.com/ArianeMora/SiRCle_M1
 
 ### Note on Windows
 We have tested our code on Windows (10) and Mac (pro) computers, I'm not sure how it would go on a Windows 7 machine so 
