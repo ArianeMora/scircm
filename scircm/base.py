@@ -39,7 +39,7 @@ Sci-RCM is the logical regulatory clustering of genes based on DNA-methylation, 
 | Hypermethylation | No Change | DOWN       | mRNA increase (TPDE)         | Protein decrease (TMDS) | TPDE+TMDS            | TMDS                 | TMDS                 |
 | Hypermethylation | UP        | No Change  | mRNA increase (TPDE)         | Protein decrease (TMDS) | TPDE+TMDS            | TPDE+TMDS            | TMDS                 |
 | Hypermethylation | DOWN      | No Change  | Methylation increase (MDS)   | Protein increase (TMDE) | MDS+TMDE             | MDS+TMDE             | TMDE                 |
-| Hypermethylation | No Change | No Change  | Methylation increase (ncRNA) | None                    | MDS-ncRNA            | MDS_ncRNA            | MDS_ncRNA            |
+| Hypermethylation | DOWN      | No Change  | Methylation increase (ncRNA) | None                    | MDS-ncRNA            | MDS_ncRNA            | MDS_ncRNA            |
 | Hypomethylation  | DOWN      | DOWN       | mRNA decrease (TPDS)         | None                    | TPDS                 | TPDS                 | TPDS                 |
 | Hypomethylation  | UP        | DOWN       | Methylation decrease (MDE)   | Protein decrease (TMDS) | MDE+TMDS             | TMDS                 | TMDS                 |
 | Hypomethylation  | UP        | UP         | Methylation decrease (MDE)   | None                    | MDE                  | MDE                  | MDE                  |
@@ -48,7 +48,7 @@ Sci-RCM is the logical regulatory clustering of genes based on DNA-methylation, 
 | Hypomethylation  | No Change | DOWN       | mRNA decrease (TPDS)         | Protein decrease (TMDS) | TPDS+TMDS            | TMDS                 | TMDS                 |
 | Hypomethylation  | UP        | No Change  | Methylation decrease (MDE)   | Protein decrease (TMDS) | MDE+TMDS             | MDE+TMDS             | TMDS                 |
 | Hypomethylation  | DOWN      | No Change  | mRNA decrease (TPDS)         | Protein increase (TMDE) | TPDS+TMDE            | TPDS+TMDE            | TMDE                 |
-| Hypomethylation  | No Change | No Change  | Methylation decrease (ncRNA) | None                    | MDE+ncRNA            | MDE_ncRNA            | MDE_ncRNA            |
+| Hypomethylation  | UP        | No Change  | Methylation decrease (ncRNA) | None                    | MDE+ncRNA            | MDE_ncRNA            | MDE_ncRNA            |
 | No Change        | DOWN      | UP         | mRNA decrease (TPDS)         | Protein increase (TMDE) | TMDE                 | TPDS+TMDE            | TMDE                 |
 | No Change        | UP        | DOWN       | mRNA increase (TPDE)         | Protein decrease (TMDS) | TMDS                 | TPDE+TMDS            | TMDS                 |
 | No Change        | DOWN      | DOWN       | mRNA decrease (TPDS)         | None                    | TPDS                 | TPDS                 | TPDS                 |
@@ -339,10 +339,10 @@ class SciRCM:
 
         # -------------- Non-Coding gene clusters
         # Hypermethylation | No Change | No Change  | Methylation increase (ncRNA) | None
-        self.get_grp(meth_c='pos', rna_c='-', prot_c='-', grp_id='MDS-ncRNA', reg_grp_1='MDS-ncRNA',
+        self.get_grp(meth_c='pos', rna_c='neg', prot_c='-', grp_id='MDS-ncRNA', reg_grp_1='MDS-ncRNA',
                      reg_grp_3='MDS-ncRNA', filter_list=self.non_coding_genes)
         # Hypomethylation  | No Change | No Change  | Methylation decrease (ncRNA) | None
-        self.get_grp(meth_c='neg', rna_c='-', prot_c='-', grp_id='MDE-ncRNA', reg_grp_1='MDE-ncRNA',
+        self.get_grp(meth_c='neg', rna_c='pos', prot_c='-', grp_id='MDE-ncRNA', reg_grp_1='MDE-ncRNA',
                      reg_grp_3='MDE-ncRNA', filter_list=self.non_coding_genes)
 
         # Close the logfile
@@ -352,15 +352,6 @@ class SciRCM:
 
     def get_df(self):
         return self.df
-
-    def integrate(self):
-        # Here we combine the p-values and use a VAE to compute an integrated rank.
-        combined_padj = []
-        for i, p in enumerate(encoded_rcm['Protein_padj'].values):
-            rna_p = encoded_rcm['RNA_padj'].values[i]
-            cpg_p = encoded_rcm['CpG_padj'].values[i]
-            combined_padj.append(combine_pvalues([p, rna_p, cpg_p])[1])
-        encoded_rcm['combined_padj'] = combined_padj
 
     def get_grp(self, meth_c: str, rna_c: str, prot_c: str, grp_id: str, filter_list=None, reg_grp_1='', reg_grp_3=''):
         """ Compute all genes meeting a specific regulatory condition. """
