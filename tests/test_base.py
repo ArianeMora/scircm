@@ -156,7 +156,7 @@ class TestSciRCM(TestClass):
             if true_labels[i]:  # Otherwise we'd be testing between 0 and null
                 assert true_labels[i] == tst_label
             elif tst_label and 'nc' in tst_label:
-                assert tst_label == 'MDS-ncRNA'
+                assert tst_label == 'S-ncRNA'
             else:
                 assert tst_label == "None"
         assigned = rcm.get_all_assigned_genes()

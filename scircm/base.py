@@ -353,13 +353,27 @@ class SciRCM:
         # No Change        | DOWN      | No Change  | mRNA decrease (TPDS)         | Protein increase (TMDE) | TPDS+TMDE
         self.get_grp(meth_c='-', rna_c='neg', prot_c='-', grp_id='TPDS_TMDE', reg_grp_1='TPDS_TMDE', reg_grp_3='TMDE')
 
-        # -------------- Non-Coding gene clusters
-        # Hypermethylation | No Change | No Change  | Methylation increase (ncRNA) | None
-        self.get_grp(meth_c='pos', rna_c='neg', prot_c='-', grp_id='MDS-ncRNA', reg_grp_1='MDS-ncRNA',
-                     reg_grp_3='MDS-ncRNA', filter_list=self.non_coding_genes)
-        # Hypomethylation  | No Change | No Change  | Methylation decrease (ncRNA) | None
-        self.get_grp(meth_c='neg', rna_c='pos', prot_c='-', grp_id='MDE-ncRNA', reg_grp_1='MDE-ncRNA',
-                     reg_grp_3='MDE-ncRNA', filter_list=self.non_coding_genes)
+        if self.non_coding_genes is not None:
+            # -------------- Non-Coding gene clusters
+            # | Hypermethylation | DOWN      | No Change  | Methylation increase                    | S_ncRNA
+            self.get_grp(meth_c='pos', rna_c='neg', prot_c='-', grp_id='S-ncRNA', reg_grp_1='S-ncRNA',
+                         reg_grp_3='S-ncRNA', filter_list=self.non_coding_genes)
+            # | Hypermethylation | UP        | No Change  | Methylation increase & mRNA increase    | E_ncRNA
+            self.get_grp(meth_c='pos', rna_c='pos', prot_c='-', grp_id='E-ncRNA', reg_grp_1='E-ncRNA',
+                         reg_grp_3='E-ncRNA', filter_list=self.non_coding_genes)
+            # | No Change        | UP        | No Change  | mRNA increase                           | E_ncRNA
+            self.get_grp(meth_c='-', rna_c='pos', prot_c='-', grp_id='E-ncRNA', reg_grp_1='E-ncRNA',
+                         reg_grp_3='E-ncRNA', filter_list=self.non_coding_genes)
+
+            # | Hypomethylation  | DOWN      | No Change  | Methylation decrease & mRNA decrease    | S_ncRNA
+            self.get_grp(meth_c='neg', rna_c='neg', prot_c='-', grp_id='S-ncRNA', reg_grp_1='S-ncRNA',
+                         reg_grp_3='S-ncRNA', filter_list=self.non_coding_genes)
+            # | Hypomethylation  | UP        | No Change  | Methylation decrease                    | E_ncRNA
+            self.get_grp(meth_c='neg', rna_c='pos', prot_c='-', grp_id='E-ncRNA', reg_grp_1='E-ncRNA',
+                         reg_grp_3='E-ncRNA', filter_list=self.non_coding_genes)
+            # | No Change        | DOWN      | No Change  | mRNA decrease                           | S_ncRNA
+            self.get_grp(meth_c='-', rna_c='neg', prot_c='-', grp_id='S-ncRNA', reg_grp_1='S-ncRNA',
+                         reg_grp_3='S-ncRNA', filter_list=self.non_coding_genes)
 
         # Close the logfile
         if self.logfile is not None:
