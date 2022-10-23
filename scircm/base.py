@@ -176,7 +176,6 @@ class SciRCM:
         # Calculate groups
         self.run_rcm()
         # Save the DF and return the groupings
-        self.df.to_csv(os.path.join(self.output_dir, self.output_filename), index=False)
         return self.df
 
     @staticmethod
@@ -225,12 +224,15 @@ class SciRCM:
         meth_padj_values = self.merged_df[self.meth_padj].values
         prot_padj_values = self.merged_df[self.prot_padj].values
 
-        # Choose the background dataframe
+        # Choose the background dataframe, but override with the non-coding gene list
+        gene_names = self.merged_df[self.gene_id].values
         for i, rna_padj in enumerate(self.merged_df[self.rna_padj].values):
             c = self._get_bg_filter(bg_type, prot_val=prot_padj_values[i], rna_val=rna_padj,
                                     meth_val=meth_padj_values[i],
                                     prot_padj_cutoff=prot_padj_cutoff, meth_padj_cutoff=meth_padj_cutoff,
                                     rna_padj_cutoff=rna_padj_cutoff)
+            if self.non_coding_genes is not None and gene_names[i] in self.non_coding_genes:
+                c += 1  # i.e. make sure c is at least 1!
             filter_vals[i] = c
 
         df = self.merged_df.copy()
@@ -356,24 +358,24 @@ class SciRCM:
         if self.non_coding_genes is not None:
             # -------------- Non-Coding gene clusters
             # | Hypermethylation | DOWN      | No Change  | Methylation increase                    | S_ncRNA
-            self.get_grp(meth_c='pos', rna_c='neg', prot_c='-', grp_id='S-ncRNA', reg_grp_1='S-ncRNA',
-                         reg_grp_3='S-ncRNA', filter_list=self.non_coding_genes)
+            self.get_grp(meth_c='pos', rna_c='neg', prot_c='-', grp_id='S_ncRNA', reg_grp_1='S_ncRNA',
+                         reg_grp_3='S_ncRNA', filter_list=self.non_coding_genes)
             # | Hypermethylation | UP        | No Change  | Methylation increase & mRNA increase    | E_ncRNA
-            self.get_grp(meth_c='pos', rna_c='pos', prot_c='-', grp_id='E-ncRNA', reg_grp_1='E-ncRNA',
-                         reg_grp_3='E-ncRNA', filter_list=self.non_coding_genes)
+            self.get_grp(meth_c='pos', rna_c='pos', prot_c='-', grp_id='E_ncRNA', reg_grp_1='E_ncRNA',
+                         reg_grp_3='E_ncRNA', filter_list=self.non_coding_genes)
             # | No Change        | UP        | No Change  | mRNA increase                           | E_ncRNA
-            self.get_grp(meth_c='-', rna_c='pos', prot_c='-', grp_id='E-ncRNA', reg_grp_1='E-ncRNA',
-                         reg_grp_3='E-ncRNA', filter_list=self.non_coding_genes)
+            self.get_grp(meth_c='-', rna_c='pos', prot_c='-', grp_id='E_ncRNA', reg_grp_1='E_ncRNA',
+                         reg_grp_3='E_ncRNA', filter_list=self.non_coding_genes)
 
             # | Hypomethylation  | DOWN      | No Change  | Methylation decrease & mRNA decrease    | S_ncRNA
-            self.get_grp(meth_c='neg', rna_c='neg', prot_c='-', grp_id='S-ncRNA', reg_grp_1='S-ncRNA',
-                         reg_grp_3='S-ncRNA', filter_list=self.non_coding_genes)
+            self.get_grp(meth_c='neg', rna_c='neg', prot_c='-', grp_id='S_ncRNA', reg_grp_1='S_ncRNA',
+                         reg_grp_3='S_ncRNA', filter_list=self.non_coding_genes)
             # | Hypomethylation  | UP        | No Change  | Methylation decrease                    | E_ncRNA
-            self.get_grp(meth_c='neg', rna_c='pos', prot_c='-', grp_id='E-ncRNA', reg_grp_1='E-ncRNA',
-                         reg_grp_3='E-ncRNA', filter_list=self.non_coding_genes)
+            self.get_grp(meth_c='neg', rna_c='pos', prot_c='-', grp_id='E_ncRNA', reg_grp_1='E_ncRNA',
+                         reg_grp_3='E_ncRNA', filter_list=self.non_coding_genes)
             # | No Change        | DOWN      | No Change  | mRNA decrease                           | S_ncRNA
-            self.get_grp(meth_c='-', rna_c='neg', prot_c='-', grp_id='S-ncRNA', reg_grp_1='S-ncRNA',
-                         reg_grp_3='S-ncRNA', filter_list=self.non_coding_genes)
+            self.get_grp(meth_c='-', rna_c='neg', prot_c='-', grp_id='S_ncRNA', reg_grp_1='S_ncRNA',
+                         reg_grp_3='S_ncRNA', filter_list=self.non_coding_genes)
 
         # Close the logfile
         if self.logfile is not None:

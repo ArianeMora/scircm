@@ -165,8 +165,8 @@ class TestSciRCM(TestClass):
         assert len(assigned) + len(unassigned) == len(rcm.df)
 
     def test_bg(self):
-        nc_df = pd.read_csv(os.path.join(self.data_dir, 'hsapiens_go_non-coding_14122020.csv'))
-        nc_genes = list(nc_df['Name'].values)
+        nc_df = pd.read_csv(os.path.join(self.data_dir, 'hsapiens_gene_ensembl-GRCh38.p13.csv'))
+        nc_genes = list(nc_df['external_gene_name'].values)
         rcm = SciRCM(self.meth_file, self.rna_file, self.prot_file, "logFC_r", "padj_r", "logFC_m", "padj_m",
                      "logFC_p", "padj_p", "gene_name", sep=',',
                      rna_padj_cutoff=0.05, prot_padj_cutoff=0.05, meth_padj_cutoff=0.05,
@@ -221,3 +221,64 @@ class TestSciRCM(TestClass):
 
         # Check *
         assert rcm._get_bg_filter('*', 1, 2, 3, 0.05, 0.05, 0.05) == 1
+
+        # Check P&R # bg_type, prot_val, rna_val, meth_val, prot_padj_cutoff, meth_padj_cutoff, rna_padj_cutoff
+        assert rcm._get_bg_filter('P&R', 1, 1, 0, 0.05, 0.05, 0.05) == 0
+        assert rcm._get_bg_filter('P&R', 0, 0, 0, 0.05, 0.05, 0.05) == 1
+
+        # Check P|R
+        assert rcm._get_bg_filter('P|R', 1, 1, 0, 0.05, 0.05, 0.05) == 0
+        assert rcm._get_bg_filter('P|R', 0, 0, 0, 0.05, 0.05, 0.05) == 2
+        assert rcm._get_bg_filter('P|R', 0, 1, 0, 0.05, 0.05, 0.05) == 1
+        assert rcm._get_bg_filter('P|R', 1, 0, 0, 0.05, 0.05, 0.05) == 1
+
+    def test_bg_nc_gen(self):
+        nc_df = pd.read_csv(os.path.join(self.data_dir, 'hsapiens_gene_ensembl-GRCh38.p13.csv'))
+        meth_file = os.path.join(self.data_dir, 'meth_NC.csv')
+        rna_file = os.path.join(self.data_dir, 'rna_NC.csv')
+        prot_file = os.path.join(self.data_dir, 'prot_NC.csv')
+        nc_genes = None #list(nc_df['external_gene_name'].values)
+        rcm = SciRCM(meth_file, rna_file, prot_file, "logFC_r", "padj_r", "logFC_m", "padj_m",
+                     "logFC_p", "padj_p", "gene_name", sep=',',
+                     rna_padj_cutoff=0.05, prot_padj_cutoff=0.05, meth_padj_cutoff=0.05,
+                     rna_logfc_cutoff=0.5, prot_logfc_cutoff=0.1, meth_diff_cutoff=10,
+                     non_coding_genes=nc_genes, bg_type='P|(M&R)'
+                     )
+        # Check actually generating the bg
+        rcm.merge_dfs()
+        df = rcm.gen_bg()
+        assert len(df) == 14
+
+        nc_df = pd.read_csv(os.path.join(self.data_dir, 'hsapiens_gene_ensembl-GRCh38.p13.csv'))
+        nc_genes = list(nc_df['external_gene_name'].values)
+        rcm = SciRCM(meth_file, rna_file, prot_file, "logFC_r", "padj_r", "logFC_m", "padj_m",
+                     "logFC_p", "padj_p", "gene_name", sep=',',
+                     rna_padj_cutoff=0.05, prot_padj_cutoff=0.05, meth_padj_cutoff=0.05,
+                     rna_logfc_cutoff=0.5, prot_logfc_cutoff=0.1, meth_diff_cutoff=10,
+                     non_coding_genes=nc_genes, bg_type='P|(M&R)'
+                     )
+        # Check actually generating the bg
+        rcm.merge_dfs()
+        df = rcm.gen_bg()
+        # i.e. that the three non-coding genes that are RNA only are added in!
+        assert len(df) == 18
+        # Now run the full way through!
+        rcm = SciRCM(meth_file, rna_file, prot_file, "logFC_r", "padj_r", "logFC_m", "padj_m",
+                     "logFC_p", "padj_p", "gene_name", sep=',',
+                     rna_padj_cutoff=0.05, prot_padj_cutoff=0.05, meth_padj_cutoff=0.05,
+                     rna_logfc_cutoff=0.5, prot_logfc_cutoff=0.1, meth_diff_cutoff=10,
+                     non_coding_genes=nc_genes, bg_type='P|(M&R)'
+                     )
+        df = rcm.run()
+        # Check the "label" column equals the reg label colum
+        true_labels = df['NC_label'].values
+        for i, tst_label in enumerate(df['Regulation_Grouping_2'].values):
+            if true_labels[i]:  # Otherwise we'd be testing between 0 and null
+                assert true_labels[i] == tst_label
+            else:
+                assert tst_label == "None"
+        assigned = rcm.get_all_assigned_genes()
+        unassigned = rcm.get_all_unassigned_genes()
+        assert len(set(assigned + unassigned)) == len(assigned) + len(unassigned)
+        assert len(assigned) + len(unassigned) == len(rcm.df)
+
