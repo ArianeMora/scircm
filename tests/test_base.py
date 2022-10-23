@@ -267,16 +267,19 @@ class TestSciRCM(TestClass):
                      "logFC_p", "padj_p", "gene_name", sep=',',
                      rna_padj_cutoff=0.05, prot_padj_cutoff=0.05, meth_padj_cutoff=0.05,
                      rna_logfc_cutoff=0.5, prot_logfc_cutoff=0.1, meth_diff_cutoff=10,
-                     non_coding_genes=nc_genes, bg_type='P|(M&R)'
+                     non_coding_genes=nc_genes, bg_type='P&M&R'
                      )
         df = rcm.run()
         # Check the "label" column equals the reg label colum
         true_labels = df['NC_label'].values
+        gene_names = df['gene_name'].values
         for i, tst_label in enumerate(df['Regulation_Grouping_2'].values):
             if true_labels[i]:  # Otherwise we'd be testing between 0 and null
                 assert true_labels[i] == tst_label
             else:
+                print(gene_names[i])
                 assert tst_label == "None"
+
         assigned = rcm.get_all_assigned_genes()
         unassigned = rcm.get_all_unassigned_genes()
         assert len(set(assigned + unassigned)) == len(assigned) + len(unassigned)
