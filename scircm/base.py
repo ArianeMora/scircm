@@ -29,37 +29,42 @@ class SciRCMException(SciException):
 """
 Sci-RCM is the logical regulatory clustering of genes based on DNA-methylation, RNA-seq and Proteomics data.
 
-| Methylation      | RNAseq    | Proteomics | Regulation driver_1          | Regulation driver_2     | Regulation_Grouping1 | Regulation_Grouping2 | Regulation_Grouping3 |
-|------------------|-----------|------------|------------------------------|-------------------------|----------------------|----------------------|----------------------|
-| Hypermethylation | DOWN      | DOWN       | Methylation increase (MDS)   | None                    | MDS                  | MDS                  | MDS                  |
-| Hypermethylation | UP        | DOWN       | mRNA increase (TPDE)         | Protein decrease (TMDS) | TPDE+TMDS            | TPDE+TMDS            | TMDS                 |
-| Hypermethylation | UP        | UP         | mRNA increase (TPDE)         | None                    | TPDE                 | TPDE                 | TPDE                 |
-| Hypermethylation | DOWN      | UP         | Methylation increase (MDS)   | Protein increase (TMDE) | MDS+TMDE             | TMDE                 | TMDE                 |
-| Hypermethylation | No Change | UP         | mRNA increase (TPDE)         | Protein increase (TMDE) | TPDE+TMDE            | TMDE                 | TMDE                 |
-| Hypermethylation | No Change | DOWN       | mRNA increase (TPDE)         | Protein decrease (TMDS) | TPDE+TMDS            | TMDS                 | TMDS                 |
-| Hypermethylation | UP        | No Change  | mRNA increase (TPDE)         | Protein decrease (TMDS) | TPDE+TMDS            | TPDE+TMDS            | TMDS                 |
-| Hypermethylation | DOWN      | No Change  | Methylation increase (MDS)   | Protein increase (TMDE) | MDS+TMDE             | MDS+TMDE             | TMDE                 |
-| Hypermethylation | DOWN      | No Change  | Methylation increase (ncRNA) | None                    | MDS-ncRNA            | MDS_ncRNA            | MDS_ncRNA            |
-| Hypomethylation  | DOWN      | DOWN       | mRNA decrease (TPDS)         | None                    | TPDS                 | TPDS                 | TPDS                 |
-| Hypomethylation  | UP        | DOWN       | Methylation decrease (MDE)   | Protein decrease (TMDS) | MDE+TMDS             | TMDS                 | TMDS                 |
-| Hypomethylation  | UP        | UP         | Methylation decrease (MDE)   | None                    | MDE                  | MDE                  | MDE                  |
-| Hypomethylation  | DOWN      | UP         | mRNA decrease (TPDS)         | Protein increase (TMDE) | TPDS+TMDE            | TPDS+TMDE            | TMDE                 |
-| Hypomethylation  | No Change | UP         | mRNA decrease (TPDS)         | Protein increase (TMDE) | TPDS+TMDE            | TMDE                 | TMDE                 |
-| Hypomethylation  | No Change | DOWN       | mRNA decrease (TPDS)         | Protein decrease (TMDS) | TPDS+TMDS            | TMDS                 | TMDS                 |
-| Hypomethylation  | UP        | No Change  | Methylation decrease (MDE)   | Protein decrease (TMDS) | MDE+TMDS             | MDE+TMDS             | TMDS                 |
-| Hypomethylation  | DOWN      | No Change  | mRNA decrease (TPDS)         | Protein increase (TMDE) | TPDS+TMDE            | TPDS+TMDE            | TMDE                 |
-| Hypomethylation  | UP        | No Change  | Methylation decrease (ncRNA) | None                    | MDE+ncRNA            | MDE_ncRNA            | MDE_ncRNA            |
-| No Change        | DOWN      | UP         | mRNA decrease (TPDS)         | Protein increase (TMDE) | TMDE                 | TPDS+TMDE            | TMDE                 |
-| No Change        | UP        | DOWN       | mRNA increase (TPDE)         | Protein decrease (TMDS) | TMDS                 | TPDE+TMDS            | TMDS                 |
-| No Change        | DOWN      | DOWN       | mRNA decrease (TPDS)         | None                    | TPDS                 | TPDS                 | TPDS                 |
-| No Change        | UP        | UP         | mRNA increase (TPDE)         | None                    | TPDE                 | TPDE                 | TPDE                 |
-| No Change        | No Change | UP         | Protein increase (TMDE)      | None                    | TMDE                 | TMDE                 | TMDE                 |
-| No Change        | No Change | DOWN       | Protein decrease (TMDS)      | None                    | TMDS                 | TMDS                 | TMDS                 |
-| No Change        | UP        | No Change  | mRNA increase (TPDE)         | Protein decrease (TMDS) | TPDE+TMDS            | TPDE+TMDS            | TMDS                 |
-| No Change        | DOWN      | No Change  | mRNA decrease (TPDS)         | Protein increase (TMDE) | TPDS+TMDE            | TPDS+TMDE            | TMDE                 |
-| No Change        | No Change | No Change  | NoChange                     | NoChange                | NoChange             | NoChange             | NoChange             |
+| Methylation      | RNA-seq   | Proteomics | Regulation driver                       | Regulation Grouping2 |
+|------------------|-----------|------------|-----------------------------------------|----------------------|
+| Hypomethylation  | UP        | UP         | Methylation decrease                    | MDE                  |
+| Hypermethylation | DOWN      | DOWN       | Methylation increase                    | MDS                  |
+| Hypermethylation | No Change | No Change  | Methylation increase                    | None                 |
+| Hypermethylation | DOWN      | No Change  | Methylation increase                    | S_ncRNA              |
+| Hypermethylation | UP        | No Change  | Methylation increase & mRNA increase    | E_ncRNA              |
+| No Change        | UP        | No Change  | mRNA increase                           | E_ncRNA              |
+| Hypermethylation | DOWN      | No Change  | Methylation increase & Protein increase | MDS+TMDE             |
+| Hypermethylation | DOWN      | UP         | Protein increase                        | TMDE                 |
+| Hypermethylation | No Change | UP         | Protein increase                        | TMDE                 |
+| Hypermethylation | No Change | DOWN       | Protein decrease                        | TMDS                 |
+| Hypermethylation | UP        | UP         | mRNA increase                           | TPDE                 |
+| Hypermethylation | UP        | DOWN       | mRNA increase & Protein decrease        | TPDE+TMDS            |
+| Hypermethylation | UP        | No Change  | mRNA increase & Protein decrease        | TPDE+TMDS            |
+| Hypomethylation  | No Change | No Change  | Methylation decrease                    | None                 |
+| Hypomethylation  | DOWN      | No Change  | Methylation decrease & mRNA decrease    | S_ncRNA              |
+| Hypomethylation  | UP        | No Change  | Methylation decrease                    | E_ncRNA              |
+| No Change        | DOWN      | No Change  | mRNA decrease                           | S_ncRNA              |
+| Hypomethylation  | UP        | No Change  | Methylation decrease & Protein decrease | MDE+TMDS             |
+| Hypomethylation  | No Change | UP         | Protein increase                        | TMDE                 |
+| Hypomethylation  | UP        | DOWN       | Protein decrease                        | TMDS                 |
+| Hypomethylation  | No Change | DOWN       | Protein decrease                        | TMDS                 |
+| Hypomethylation  | DOWN      | DOWN       | mRNA decrease                           | TPDS                 |
+| Hypomethylation  | DOWN      | UP         | mRNA decrease & Protein increase        | TPDS+TMDE            |
+| Hypomethylation  | DOWN      | No Change  | mRNA decrease & Protein increase        | TPDS+TMDE            |
+| No Change        | No Change | UP         | Protein increase                        | TMDE                 |
+| No Change        | No Change | DOWN       | Protein decrease                        | TMDS                 |
+| No Change        | UP        | UP         | mRNA increase                           | TPDE                 |
+| No Change        | UP        | DOWN       | mRNA increase & Protein decrease        | TPDE+TMDS            |
+| No Change        | UP        | No Change  | mRNA increase & Protein decrease        | TPDE+TMDS            |
+| No Change        | DOWN      | DOWN       | mRNA decrease                           | TPDS                 |
+| No Change        | DOWN      | UP         | mRNA decrease & Protein increase        | TPDS+TMDE            |
+| No Change        | DOWN      | No Change  | mRNA decrease & Protein increase        | TPDS+TMDE            |
+| No Change        | No Change | No Change  | None                                    | None                 |
 
-Sci-RCM also interfaces with scivae (the variational autoencoder component that we use to generate an integrated rank).
 """
 
 
@@ -117,7 +122,8 @@ class SciRCM:
         self.bg_type = bg_type
         # Otherwise this will be in the specific ones.
         if prot_logfc and rna_logfc and meth_diff:
-            self.bg_list = ['(P&M)|(P&R)', '(P&M)|(P&R)|(M&R)', '*', 'P&M&R', 'P|M|R', 'P|(M&R)']
+            self.bg_list = ['(P&M)|(P&R)', '(P&M)|(P&R)|(M&R)', '*', 'P&M&R', 'P|M|R', 'P|R', 'P&R',
+                            'P|(M&R)']
             if bg_type not in self.bg_list:
                 self.u.err_p(['ERROR: selected background type was not allowed, please choose from one of: ', self.bg_list,
                               '\n Note: | means OR and & means AND'])
@@ -134,7 +140,11 @@ class SciRCM:
         # Contains the vae data
         self.vae = None
 
-    def run(self):
+    def run(self, bg_type=None, prot_padj_bg=None, rna_padj_bg=None, meth_padj_bg=None):
+        bg_type = bg_type if bg_type else self.bg_type
+        prot_padj_bg = prot_padj_bg if prot_padj_bg else 0.05
+        rna_padj_bg = rna_padj_bg if rna_padj_bg else 0.05
+        meth_padj_bg = meth_padj_bg if meth_padj_bg else 0.05
         # First check for duplicates in IDs and drop if there are any
         if len(self.prot_df[self.prot_df[self.gene_id].duplicated()]) > 0:
             num_dups = len(self.prot_df[self.prot_df[self.gene_id].duplicated()])
@@ -161,7 +171,8 @@ class SciRCM:
         # Merge the dataframes together
         self.merge_dfs()
         # Generate background
-        self.df = self.gen_bg()
+        self.df = self.gen_bg(bg_type=bg_type, prot_padj_cutoff=prot_padj_bg, rna_padj_cutoff=rna_padj_bg,
+                              meth_padj_cutoff=meth_padj_bg)
         # Calculate groups
         self.run_rcm()
         # Save the DF and return the groupings
@@ -183,6 +194,11 @@ class SciRCM:
             c = 1 if prot_val <= prot_padj_cutoff else 0
             c += 1 if rna_val <= rna_padj_cutoff else 0
             c += 1 if meth_val <= meth_padj_cutoff else 0
+        elif bg_type == 'P|R':  # Protein OR RNA
+            c = 1 if prot_val <= prot_padj_cutoff else 0
+            c += 1 if rna_val <= rna_padj_cutoff else 0
+        elif bg_type == 'P&R':  # Protein AND RNA
+            c += 1 if rna_val <= rna_padj_cutoff and prot_val <= prot_padj_cutoff else 0
         elif bg_type == 'P&M&R':  # Protein AND Methylation AND RNA
             c = 1 if (prot_val <= prot_padj_cutoff and rna_val <= rna_padj_cutoff and meth_val <= meth_padj_cutoff) else 0
         elif bg_type == '(P&M)|(P&R)|(M&R)':  # At least two are significant
