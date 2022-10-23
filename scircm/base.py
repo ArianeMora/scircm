@@ -258,7 +258,6 @@ class SciRCM:
         self.df[[self.prot_padj]] = self.df[[self.prot_padj]].fillna(value=1.0)
         # Fill the rest of the values with 0's
         self.df = self.df.fillna(0)  # Fill any other values with 0 i.e. any of the logFCs or statistics.
-        self.df.to_csv(os.path.join(self.output_dir, "SIRCLE_merged_df.csv"), index=False)
         self.merged_df = self.df.copy()
 
     def run_rcm(self):
