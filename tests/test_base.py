@@ -106,7 +106,7 @@ class TestSciRCM(TestClass):
             if true_labels[i]:  # Otherwise we'd be testing between 0 and null
                 print(genes[i], i, tst_label, true_labels[i])
                 # Since we don't pass a non-coding gene list we need to ensure that it == None
-                assert true_labels[i].replace('+', '_') == tst_label
+                assert tst_label == true_labels[i].replace('+', '_')
             else:
                 assert tst_label == "None"
         # Check regulation grouping 1

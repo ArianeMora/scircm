@@ -1,0 +1,28 @@
+﻿gene_name,meth_diff,meth_padj,Methylation,RNAseq,Proteomics,Regulation driver_1,Regulation driver_2,Regulation_Grouping1_true,Regulation_Grouping2_true,Regulation_Grouping3_true,bg_type_P(M&R)
+gene_a,10,0.04,Hypermethylation,DOWN,DOWN,Methylation increase (MDS),None,MDS,MDS,MDS,Include
+gene_b,10,0.04,Hypermethylation,UP,DOWN,mRNA increase (TPDE),Protein decrease (TMDS),TPDE+TMDS,TPDE+TMDS,TMDS,Include
+gene_c,10,0.04,Hypermethylation,UP,UP,mRNA increase (TPDE),None,TPDE,TPDE,TPDE,Include
+gene_d,10,0.04,Hypermethylation,DOWN,UP,Methylation increase (MDS),Protein increase (TMDE),MDS+TMDE,TMDE,TMDE,Include
+gene_e,10,0.04,Hypermethylation,No Change,UP,mRNA increase (TPDE),Protein increase (TMDE),TPDE+TMDE,TMDE,TMDE,Include
+gene_f,10,0.04,Hypermethylation,No Change,DOWN,mRNA increase (TPDE),Protein decrease (TMDS),TPDE+TMDS,TMDS,TMDS,Include
+gene_g,10,0.04,Hypermethylation,UP,No Change,mRNA increase (TPDE),Protein decrease (TMDS),TPDE+TMDS,TPDE+TMDS,TMDS,Include
+gene_h,10,0.04,Hypermethylation,DOWN,No Change,Methylation increase (MDS),Protein increase (TMDE),MDS+TMDE,MDS+TMDE,TMDE,Include
+gene_i,10,0.04,Hypermethylation,No Change,No Change,Methylation increase (ncRNA),None,None,None,None,Excluded
+gene_j,-10,0.04,Hypomethylation,DOWN,DOWN,mRNA decrease (TPDS),None,TPDS,TPDS,TPDS,Include
+gene_k,-10,0.04,Hypomethylation,UP,DOWN,Methylation decrease (MDE),Protein decrease (TMDS),MDE+TMDS,TMDS,TMDS,Include
+gene_l,-10,0.04,Hypomethylation,UP,UP,Methylation decrease (MDE),None,MDE,MDE,MDE,Include
+gene_m,-10,0.04,Hypomethylation,DOWN,UP,mRNA decrease (TPDS),Protein increase (TMDE),TPDS+TMDE,TPDS+TMDE,TMDE,Include
+gene_n,-10,0.04,Hypomethylation,No Change,UP,mRNA decrease (TPDS),Protein increase (TMDE),TPDS+TMDE,TMDE,TMDE,Include
+gene_o,-10,0.04,Hypomethylation,No Change,DOWN,mRNA decrease (TPDS),Protein decrease (TMDS),TPDS+TMDS,TMDS,TMDS,Include
+gene_p,-10,0.04,Hypomethylation,UP,No Change,Methylation decrease (MDE),Protein decrease (TMDS),MDE+TMDS,MDE+TMDS,TMDS,Include
+gene_q,-10,0.04,Hypomethylation,DOWN,No Change,mRNA decrease (TPDS),Protein increase (TMDE),TPDS+TMDE,TPDS+TMDE,TMDE,Include
+gene_r,-10,0.04,Hypomethylation,No Change,No Change,Methylation decrease (ncRNA),None,None,None,None,Excluded
+gene_s,0,0.04,No Change,DOWN,UP,mRNA decrease (TPDS),Protein increase (TMDE),TPDS+TMDE,TMDE,TMDE,Include
+gene_t,0,0.04,No Change,UP,DOWN,mRNA increase (TPDE),Protein decrease (TMDS),TPDE+TMDS,TMDS,TMDS,Include
+gene_u,0,0.04,No Change,DOWN,DOWN,mRNA decrease (TPDS),None,TPDS,TPDS,TPDS,Include
+gene_v,0,0.04,No Change,UP,UP,mRNA increase (TPDE),None,TPDE,TPDE,TPDE,Include
+gene_w,0,0.04,No Change,No Change,UP,Protein increase (TMDE),None,TMDE,TMDE,TMDE,Include
+gene_x,0,0.04,No Change,No Change,DOWN,Protein decrease (TMDS),None,TMDS,TMDS,TMDS,Include
+gene_y,0,0.04,No Change,UP,No Change,mRNA increase (TPDE),Protein decrease (TMDS),TPDE+TMDS,TPDE+TMDS,TMDS,Excluded
+gene_z,0,0.04,No Change,DOWN,No Change,mRNA decrease (TPDS),Protein increase (TMDE),TPDS+TMDE,TPDS+TMDE,TMDE,Excluded
+gene_none,0.1,0.1,No Change,No Change,No Change,NoChange,NoChange,NoChange,NoChange,NoChange,Excluded
