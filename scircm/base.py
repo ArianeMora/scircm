@@ -125,9 +125,15 @@ class SciRCM:
             self.output_filename = output_filename if output_filename else f'scircm_r{rna_logfc_cutoff}-{rna_padj_cutoff}' \
                                                                        f'_p{prot_logfc_cutoff}-{prot_padj_cutoff}' \
                                                                        f'_m{meth_diff_cutoff}-{meth_padj_cutoff}.csv'
-            self.meth_df = pd.read_csv(meth_file, sep=sep)
-            self.rna_df = pd.read_csv(rna_file, sep=sep)
-            self.prot_df = pd.read_csv(proteomics_file, sep=sep)
+            if isinstance(meth_file, str):
+                self.meth_df = pd.read_csv(meth_file, sep=sep)
+                self.rna_df = pd.read_csv(rna_file, sep=sep)
+                self.prot_df = pd.read_csv(proteomics_file, sep=sep)
+            else:
+                self.meth_df = meth_file
+                self.rna_df = rna_file
+                self.prot_df = proteomics_file
+
 
         self.non_coding_genes = non_coding_genes
         # Contains genes for the non-coding region (use for human only).
@@ -215,6 +221,10 @@ class SciRCM:
                 protein_state = 'Protein UP'
             elif ~np.isnan(prot_logfc) and prot_logfc < (- 1 * self.prot_logfc_cutoff) and prot_padj < self.prot_padj_cutoff:
                 protein_state = 'Protein DOWN'
+            elif ~np.isnan(prot_logfc) and prot_logfc < 0 and prot_padj < self.prot_padj_cutoff:  # i.e. sig down but no threshold
+                protein_state = 'Protein DOWN-excluded'
+            elif ~np.isnan(prot_logfc) and prot_logfc > 0 and prot_padj < self.prot_padj_cutoff:  # i.e. sig up but no threshold
+                protein_state = 'Protein UP-excluded'
             # Add in a not-detected state
             elif np.isnan(prot_logfc):
                 protein_state = 'Protein Undetected'
@@ -265,6 +275,28 @@ class SciRCM:
                 reg_label_2.append('TPDE')
                 reg_label_3.append('TPDE')
 
+            elif state_label == 'Hypermethylation + RNA DOWN + Protein UP-excluded':  # State 10
+                reg_label_2.append('MDS+TMDE')
+                reg_label_3.append('MDS')
+            elif state_label == 'Hypermethylation + RNA No change + Protein UP-excluded':  # State 11
+                reg_label_2.append('None')
+                reg_label_3.append('None')
+                state_label = 'None'
+            elif state_label == 'Hypermethylation + RNA UP + Protein UP-excluded':  # State 12
+                reg_label_2.append('TPDE')
+                reg_label_3.append('TPDE')
+
+            elif state_label == 'Hypermethylation + RNA DOWN + Protein DOWN-excluded':  # State 10
+                reg_label_2.append('MDS')
+                reg_label_3.append('TMDE')
+            elif state_label == 'Hypermethylation + RNA No change + Protein DOWN-excluded':  # State 11
+                reg_label_2.append('None')
+                reg_label_3.append('None')
+                state_label = 'None'
+            elif state_label == 'Hypermethylation + RNA UP + Protein DOWN-excluded':  # State 12
+                reg_label_2.append('TPDE-TMDS')
+                reg_label_3.append('TPDE')
+
             # The same for hypomethylation
             elif state_label == 'Hypomethylation + RNA DOWN + Protein DOWN':  # State 13
                 reg_label_2.append('TPDS')
@@ -306,6 +338,17 @@ class SciRCM:
                 state_label = 'None'
             elif state_label == 'Hypomethylation + RNA UP + Protein Undetected':  # State 24
                 reg_label_2.append('MDE')
+                reg_label_3.append('MDE')
+
+            elif state_label == 'Hypomethylation + RNA DOWN + Protein DOWN-excluded':  # State 13
+                reg_label_2.append('TPDS')
+                reg_label_3.append('TPDS')
+            elif state_label == 'Hypomethylation + RNA No change + Protein DOWN-excluded':  # State 14
+                reg_label_2.append('None')
+                reg_label_3.append('None')
+                state_label = 'None'
+            elif state_label == 'Hypomethylation + RNA UP + Protein DOWN-excluded':  # State 15
+                reg_label_2.append('MDE+TMDS')
                 reg_label_3.append('MDE')
 
             # Same for no-change
@@ -350,6 +393,29 @@ class SciRCM:
             elif state_label == 'Methylation No change + RNA UP + Protein UP':  # State 36
                 reg_label_2.append('TPDE')
                 reg_label_3.append('TPDE')
+
+            elif state_label == 'Methylation No change + RNA DOWN + Protein UP-excluded':  # State 34
+                reg_label_2.append('TMDE')
+                reg_label_3.append('TMDE')
+            elif state_label == 'Methylation No change + RNA No change + Protein UP-excluded':  # State 35
+                reg_label_2.append('None')
+                reg_label_3.append('None')
+                state_label = 'None'
+            elif state_label == 'Methylation No change + RNA UP + Protein UP-excluded':  # State 36
+                reg_label_2.append('TPDE')
+                reg_label_3.append('TPDE')
+
+            elif state_label == 'Methylation No change + RNA DOWN + Protein DOWN-excluded':  # State 25
+                reg_label_2.append('TPDS')
+                reg_label_3.append('TPDS')
+            elif state_label == 'Methylation No change + RNA No change + Protein DOWN-excluded':  # State 26
+                reg_label_2.append('None')
+                reg_label_3.append('None')
+                state_label = 'None'
+            elif state_label == 'Methylation No change + RNA UP + Protein DOWN-excluded':  # State 27
+                reg_label_2.append('TMDS')
+                reg_label_3.append('TMDS')
+
             else:
                 state_label = 'None'
                 reg_label_2.append('None')
@@ -359,6 +425,10 @@ class SciRCM:
         self.df[self.reg_grp_1_lbl] = reg_label_1
         self.df[self.reg_grp_2_lbl] = reg_label_2
         self.df[self.reg_grp_3_lbl] = reg_label_3
+        # Now we want to make three new columns that define the states of methylation RNA and protein
+        self.df['Methylation'] = [s if s == 'None' else s.split(' + ')[0] for s in reg_label_1]
+        self.df['RNA'] = [s if s == 'None' else s.split(' + ')[1] for s in reg_label_1]
+        self.df['Protein'] = [s if s == 'None' else s.split(' + ')[2] for s in reg_label_1]
 
     def get_df(self):
         return self.df
