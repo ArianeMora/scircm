@@ -91,7 +91,7 @@ class SciRCM:
                  output_filename=None,
                  non_coding_genes=None,
                  debug_on=False, sep=',',
-                 bg_type='P|(M&R)',
+                 bg_type='P&R',
                  sciutil=None,
                  logfile=None,
                  reg_grp_1_lbl='RegulationGrouping_All',
