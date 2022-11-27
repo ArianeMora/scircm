@@ -94,10 +94,11 @@ class SciRCM:
                  bg_type='P|(M&R)',
                  sciutil=None,
                  logfile=None,
-                 reg_grp_1_lbl='Regulation_Grouping_1',
-                 reg_grp_2_lbl='Regulation_Grouping_2',
-                 reg_grp_3_lbl='Regulation_Grouping_3',
-                 main_reg_label='Regulation_Grouping_2'):
+                 reg_grp_1_lbl='RegulationGrouping_All',
+                 reg_grp_2_lbl='RegulationGrouping_Detection',
+                 reg_grp_3_lbl='RegulationGrouping_Protein',
+                 main_reg_label='RegulationGrouping_Changes',
+                 reg_grp_4_lbl='RegulationGrouping_Changes'):
         self.u = SciUtil() if sciutil is None else sciutil
         plt.rcParams['svg.fonttype'] = 'none'
         self.meth_diff = meth_diff
@@ -116,6 +117,7 @@ class SciRCM:
         self.reg_grp_1_lbl = reg_grp_1_lbl
         self.reg_grp_2_lbl = reg_grp_2_lbl
         self.reg_grp_3_lbl = reg_grp_3_lbl
+        self.reg_grp_4_lbl = reg_grp_4_lbl
         self.main_reg_label = main_reg_label
         if main_reg_label != reg_grp_2_lbl and main_reg_label != reg_grp_1_lbl and main_reg_label != reg_grp_3_lbl:
             self.u.err_p([f'ERROR: your main regulatory label (main_reg_label) must be one of: '
@@ -198,7 +200,7 @@ class SciRCM:
         rna_logfcs = self.df[self.rna_logfc].values
         meth_padjs = self.df[self.meth_padj].values
         meth_diffs = self.df[self.meth_diff].values
-        reg_label_1, reg_label_2, reg_label_3 = [], [], []
+        reg_label_1, reg_label_2, reg_label_4, reg_label_3 = [], [], [], []
         background_filter = []
         for i, gene in enumerate(self.df[self.gene_id].values):
             meth_diff = meth_diffs[i]
@@ -270,201 +272,241 @@ class SciRCM:
             if state_label == 'Hypermethylation + RNA DOWN + Protein DOWN':  # State 1
                 reg_label_2.append('MDS')
                 reg_label_3.append('MDS')
+                reg_label_4.append('MDS')
             elif state_label == 'Hypermethylation + RNA No change + Protein DOWN':  # State 2
                 reg_label_2.append('TMDS')
                 reg_label_3.append('TMDS')
+                reg_label_4.append('TMDS')
             elif state_label == 'Hypermethylation + RNA UP + Protein DOWN':  # State 3
                 reg_label_2.append('TPDE+TMDS')
                 reg_label_3.append('TMDS')
+                reg_label_4.append('TPDE+TMDS')
 
             elif state_label == 'Hypermethylation + RNA DOWN + Protein not-significant':  # State 4
-                reg_label_2.append('MDS')
+                reg_label_2.append('MDS+TMDE')
                 reg_label_3.append('None')
+                reg_label_4.append('MDS+TMDE')
             elif state_label == 'Hypermethylation + RNA No change + Protein not-significant':  # State 5
                 reg_label_2.append('None')  # This would only be included if we have the non-coding groups
                 reg_label_3.append('None')
-                state_label = 'None'
+                reg_label_4.append('None')
             elif state_label == 'Hypermethylation + RNA UP + Protein not-significant':  # State 6
-                reg_label_2.append('TPDE')
+                reg_label_2.append('TPDE+TMDS')
+                reg_label_4.append('TPDE+TMDS')
                 reg_label_3.append('None')
 
             elif state_label == 'Hypermethylation + RNA DOWN + Protein Undetected':  # State 7
                 reg_label_2.append('MDS')
                 reg_label_3.append('MDS')
+                reg_label_4.append('MDS+TMDE')
             elif state_label == 'Hypermethylation + RNA No change + Protein Undetected':  # State 8
                 reg_label_2.append('None')  # This would only be included if we have the non-coding groups
                 reg_label_3.append('None')
-                state_label = 'None'
+                reg_label_4.append('None')
             elif state_label == 'Hypermethylation + RNA UP + Protein Undetected':  # State 9
                 reg_label_2.append('TPDE')
                 reg_label_3.append('TPDE')
+                reg_label_4.append('TPDE+TMDS')
 
             elif state_label == 'Hypermethylation + RNA DOWN + Protein UP':  # State 10
                 reg_label_2.append('MDS+TMDE')
                 reg_label_3.append('TMDE')
+                reg_label_4.append('MDS+TMDE')
             elif state_label == 'Hypermethylation + RNA No change + Protein UP':  # State 11
                 reg_label_2.append('TMDE')
                 reg_label_3.append('TMDE')
+                reg_label_4.append('TMDE')
             elif state_label == 'Hypermethylation + RNA UP + Protein UP':  # State 12
                 reg_label_2.append('TPDE')
                 reg_label_3.append('TPDE')
+                reg_label_4.append('TPDE')
 
             elif state_label == 'Hypermethylation + RNA DOWN + Protein significant-positive':  # State 10
                 reg_label_2.append('MDS+TMDE')
                 reg_label_3.append('TMDE')
+                reg_label_4.append('MDS+TMDE')
             elif state_label == 'Hypermethylation + RNA No change + Protein significant-positive':  # State 11
                 reg_label_2.append('None')
                 reg_label_3.append('None')
-                state_label = 'None'
+                reg_label_4.append('None')
             elif state_label == 'Hypermethylation + RNA UP + Protein significant-positive':  # State 12
                 reg_label_2.append('TPDE')
                 reg_label_3.append('TPDE')
-
+                reg_label_4.append('TPDE+TMDS')
             elif state_label == 'Hypermethylation + RNA DOWN + Protein significant-negative':  # State 10
                 reg_label_2.append('MDS')
                 reg_label_3.append('MDS')
+                reg_label_4.append('MDS+TMDE')
             elif state_label == 'Hypermethylation + RNA No change + Protein significant-negative':  # State 11
                 reg_label_2.append('None')
                 reg_label_3.append('None')
-                state_label = 'None'
+                reg_label_4.append('None')
             elif state_label == 'Hypermethylation + RNA UP + Protein significant-negative':  # State 12
                 reg_label_2.append('TPDE+TMDS')
                 reg_label_3.append('TMDS')
+                reg_label_4.append('TPDE+TMDS')
 
             # The same for hypomethylation
             elif state_label == 'Hypomethylation + RNA DOWN + Protein DOWN':  # State 13
                 reg_label_2.append('TPDS')
                 reg_label_3.append('TPDS')
+                reg_label_4.append('TPDS')
             elif state_label == 'Hypomethylation + RNA No change + Protein DOWN':  # State 14
                 reg_label_2.append('TMDS')
                 reg_label_3.append('TMDS')
+                reg_label_4.append('TMDS')
             elif state_label == 'Hypomethylation + RNA UP + Protein DOWN':  # State 15
                 reg_label_2.append('MDE+TMDS')
                 reg_label_3.append('TMDS')
+                reg_label_4.append('MDE+TMDS')
 
             elif state_label == 'Hypomethylation + RNA DOWN + Protein not-significant':  # State 16
-                reg_label_2.append('TPDS')
+                reg_label_2.append('TPDS+TMDE')
                 reg_label_3.append('None')
+                reg_label_4.append('TPDS+TMDE')
             elif state_label == 'Hypomethylation + RNA No change + Protein not-significant':  # State 17
                 reg_label_2.append('None')  # This would only be included if we have the non-coding groups
                 reg_label_3.append('None')
-                state_label = 'None'
+                reg_label_4.append('None')
             elif state_label == 'Hypomethylation + RNA UP + Protein not-significant':  # State 18
-                reg_label_2.append('MDE')
+                reg_label_2.append('MDE+TMDS')
                 reg_label_3.append('None')
+                reg_label_4.append('MDE+TMDS')
 
             elif state_label == 'Hypomethylation + RNA DOWN + Protein UP':  # State 19
                 reg_label_2.append('TPDS+TMDE')
                 reg_label_3.append('TMDE')
+                reg_label_4.append('TPDS+TMDE')
             elif state_label == 'Hypomethylation + RNA No change + Protein UP':  # State 20
                 reg_label_2.append('TMDE')
                 reg_label_3.append('TMDE')
+                reg_label_4.append('TMDE')
             elif state_label == 'Hypomethylation + RNA UP + Protein UP':  # State 21
                 reg_label_2.append('MDE')
                 reg_label_3.append('MDE')
+                reg_label_4.append('MDE')
 
             elif state_label == 'Hypomethylation + RNA DOWN + Protein Undetected':  # State 22
                 reg_label_2.append('TPDS')
                 reg_label_3.append('TPDS')
+                reg_label_4.append('TPDS+TMDE')
             elif state_label == 'Hypomethylation + RNA No change + Protein Undetected':  # State 23
                 reg_label_2.append('None')  # This would only be included if we have the non-coding groups
                 reg_label_3.append('None')
-                state_label = 'None'
+                reg_label_4.append('None')
             elif state_label == 'Hypomethylation + RNA UP + Protein Undetected':  # State 24
                 reg_label_2.append('MDE')
                 reg_label_3.append('MDE')
+                reg_label_4.append('MDE+TMDS')
 
             elif state_label == 'Hypomethylation + RNA DOWN + Protein significant-negative':  # State 13
                 reg_label_2.append('TPDS')
                 reg_label_3.append('TPDS')
+                reg_label_4.append('TPDS+TMDE')
             elif state_label == 'Hypomethylation + RNA No change + Protein significant-negative':  # State 14
                 reg_label_2.append('None')
                 reg_label_3.append('None')
-                state_label = 'None'
+                reg_label_4.append('None')
             elif state_label == 'Hypomethylation + RNA UP + Protein significant-negative':  # State 15
                 reg_label_2.append('MDE+TMDS')
                 reg_label_3.append('TMDS')
+                reg_label_4.append('MDE+TMDS')
 
             elif state_label == 'Hypomethylation + RNA DOWN + Protein significant-positive':
                 reg_label_2.append('TPDS+TMDE')
                 reg_label_3.append('TMDE')
+                reg_label_4.append('TPDS+TMDE')
             elif state_label == 'Hypomethylation + RNA No change + Protein significant-positive':  # State 14
                 reg_label_2.append('None')
                 reg_label_3.append('None')
-                state_label = 'None'
+                reg_label_4.append('None')
             elif state_label == 'Hypomethylation + RNA UP + Protein significant-positive':  # State 15
                 reg_label_2.append('MDE')
                 reg_label_3.append('MDE')
+                reg_label_4.append('MDE+TMDS')
 
             # Same for no-change
             elif state_label == 'Methylation No change + RNA DOWN + Protein DOWN':  # State 25
                 reg_label_2.append('TPDS')
                 reg_label_3.append('TPDS')
+                reg_label_4.append('TPDS')
             elif state_label == 'Methylation No change + RNA No change + Protein DOWN':  # State 26
                 reg_label_2.append('TMDS')
                 reg_label_3.append('TMDS')
+                reg_label_4.append('TMDS')
             elif state_label == 'Methylation No change + RNA UP + Protein DOWN':  # State 27
                 reg_label_2.append('TPDE+TMDS')
                 reg_label_3.append('TMDS')
+                reg_label_4.append('TPDE+TMDS')
 
             elif state_label == 'Methylation No change + RNA DOWN + Protein not-significant':  # State 28
-                reg_label_2.append('TPDS')
+                reg_label_2.append('TPDS+TMDE')
                 reg_label_3.append('None')
+                reg_label_4.append('TPDS+TMDE')
             elif state_label == 'Methylation No change + RNA No change + Protein not-significant':  # State 29
                 reg_label_2.append('None')  # This would only be included if we have the non-coding groups
                 reg_label_3.append('None')
-                state_label = 'None'
+                reg_label_4.append('None')
             elif state_label == 'Methylation No change + RNA UP + Protein not-significant':  # State 30
-                reg_label_2.append('TPDE')
+                reg_label_2.append('TPDE+TMDS')
                 reg_label_3.append('None')
+                reg_label_4.append('TPDE+TMDS')
 
             elif state_label == 'Methylation No change + RNA DOWN + Protein Undetected':  # State 31
                 reg_label_2.append('TPDS')
                 reg_label_3.append('TPDS')
+                reg_label_4.append('TPDS+TMDE')
             elif state_label == 'Methylation No change + RNA No change + Protein Undetected':  # State 32
                 reg_label_2.append('None')  # This would only be included if we have the non-coding groups
                 reg_label_3.append('None')
-                state_label = 'None'
+                reg_label_4.append('None')
             elif state_label == 'Methylation No change + RNA UP + Protein Undetected':  # State 33
                 reg_label_2.append('TPDE')
                 reg_label_3.append('TPDE')
+                reg_label_4.append('TPDE+TMDS')
 
             elif state_label == 'Methylation No change + RNA DOWN + Protein UP':  # State 34
                 reg_label_2.append('TPDS+TMDE')
                 reg_label_3.append('TMDE')
+                reg_label_4.append('TPDS+TMDE')
             elif state_label == 'Methylation No change + RNA No change + Protein UP':  # State 35
                 reg_label_2.append('TMDE')
                 reg_label_3.append('TMDE')
+                reg_label_4.append('TMDE')
             elif state_label == 'Methylation No change + RNA UP + Protein UP':  # State 36
                 reg_label_2.append('TPDE')
                 reg_label_3.append('TPDE')
+                reg_label_4.append('TPDE')
 
             elif state_label == 'Methylation No change + RNA DOWN + Protein significant-positive':  # State 34
                 reg_label_2.append('TPDS+TMDE')
                 reg_label_3.append('TMDE')
+                reg_label_4.append('TPDS+TMDE')
             elif state_label == 'Methylation No change + RNA No change + Protein significant-positive':  # State 35
                 reg_label_2.append('None')
                 reg_label_3.append('None')
-                state_label = 'None'
+                reg_label_4.append('None')
             elif state_label == 'Methylation No change + RNA UP + Protein significant-positive':  # State 36
                 reg_label_2.append('TPDE')
                 reg_label_3.append('TPDE')
+                reg_label_4.append('TPDE+TMDS')
 
             elif state_label == 'Methylation No change + RNA DOWN + Protein significant-negative':  # State 25
                 reg_label_2.append('TPDS')
                 reg_label_3.append('TPDS')
+                reg_label_4.append('TPDS+TMDE')
             elif state_label == 'Methylation No change + RNA No change + Protein significant-negative':  # State 26
                 reg_label_2.append('None')
                 reg_label_3.append('None')
-                state_label = 'None'
+                reg_label_4.append('None')
             elif state_label == 'Methylation No change + RNA UP + Protein significant-negative':  # State 27
                 reg_label_2.append('TPDE+TMDS')
                 reg_label_3.append('TMDS')
-
+                reg_label_4.append('TPDE+TMDS')
             else:
-                state_label = 'None'
                 reg_label_2.append('None')
                 reg_label_3.append('None')
+                reg_label_4.append('None')
             # Add the reg group 1
             reg_label_1.append(state_label)
 
@@ -476,6 +518,8 @@ class SciRCM:
         self.df[self.reg_grp_1_lbl] = reg_label_1
         self.df[self.reg_grp_2_lbl] = reg_label_2
         self.df[self.reg_grp_3_lbl] = reg_label_3
+        self.df[self.reg_grp_4_lbl] = reg_label_4
+
         self.df['Background_filter'] = background_filter
         # For each of the regulatory labels, apply the background filter depending on what the user chose
         self.apply_bg_filter()
@@ -493,6 +537,7 @@ class SciRCM:
             self.df[f'{self.reg_grp_1_lbl}_filtered'] = [c if bg[i] in conds else 'None' for i, c in enumerate(self.df[self.reg_grp_1_lbl].values)]
             self.df[f'{self.reg_grp_2_lbl}_filtered'] = [c if bg[i] in conds else 'None' for i, c in enumerate(self.df[self.reg_grp_2_lbl].values)]
             self.df[f'{self.reg_grp_3_lbl}_filtered'] = [c if bg[i] in conds else 'None' for i, c in enumerate(self.df[self.reg_grp_3_lbl].values)]
+            self.df[f'{self.reg_grp_4_lbl}_filtered'] = [c if bg[i] in conds else 'None' for i, c in enumerate(self.df[self.reg_grp_4_lbl].values)]
 
         elif bg_type == 'P|M|R':  # Protein OR methylation OR RNA
             conds = ['NS + NS + NS']  # i.e. only one we don't want is NS
@@ -502,6 +547,8 @@ class SciRCM:
                                                          enumerate(self.df[self.reg_grp_2_lbl].values)]
             self.df[f'{self.reg_grp_3_lbl}_filtered'] = [c if bg[i] not in conds else 'None' for i, c in
                                                          enumerate(self.df[self.reg_grp_3_lbl].values)]
+            self.df[f'{self.reg_grp_4_lbl}_filtered'] = [c if bg[i] not in conds else 'None' for i, c in
+                                                         enumerate(self.df[self.reg_grp_4_lbl].values)]
 
         elif bg_type == 'P|R':  # Protein OR RNA
             conds = ['NS + NS + NS', 'threshold + NS + NS']  # i.e. only one we don't want is NS in protein and RNA
@@ -511,6 +558,8 @@ class SciRCM:
                                                          enumerate(self.df[self.reg_grp_2_lbl].values)]
             self.df[f'{self.reg_grp_3_lbl}_filtered'] = [c if bg[i] not in conds else 'None' for i, c in
                                                          enumerate(self.df[self.reg_grp_3_lbl].values)]
+            self.df[f'{self.reg_grp_4_lbl}_filtered'] = [c if bg[i] not in conds else 'None' for i, c in
+                                                         enumerate(self.df[self.reg_grp_4_lbl].values)]
 
         elif bg_type == 'P&R':  # Protein AND RNA
             conds = ['threshold + threshold + threshold',  # RNA & Methylation ~Protein
@@ -522,6 +571,8 @@ class SciRCM:
                                                          enumerate(self.df[self.reg_grp_2_lbl].values)]
             self.df[f'{self.reg_grp_3_lbl}_filtered'] = [c if bg[i] in conds else 'None' for i, c in
                                                          enumerate(self.df[self.reg_grp_3_lbl].values)]
+            self.df[f'{self.reg_grp_4_lbl}_filtered'] = [c if bg[i] in conds else 'None' for i, c in
+                                                         enumerate(self.df[self.reg_grp_4_lbl].values)]
 
         elif bg_type == 'P&M&R':  # Protein AND Methylation AND RNA
             conds = ['threshold + threshold + threshold']
@@ -531,6 +582,8 @@ class SciRCM:
                                                          enumerate(self.df[self.reg_grp_2_lbl].values)]
             self.df[f'{self.reg_grp_3_lbl}_filtered'] = [c if bg[i] in conds else 'None' for i, c in
                                                          enumerate(self.df[self.reg_grp_3_lbl].values)]
+            self.df[f'{self.reg_grp_4_lbl}_filtered'] = [c if bg[i] in conds else 'None' for i, c in
+                                                         enumerate(self.df[self.reg_grp_4_lbl].values)]
         elif bg_type == '(P&M)|(P&R)|(M&R)':  # At least two are significant
             conds = ['NS + NS + NS', 'NS + NS + threshold', 'NS + threshold + NS', 'threshold + NS + NS']
             self.df[f'{self.reg_grp_1_lbl}_filtered'] = [c if bg[i] not in conds else 'None' for i, c in
@@ -539,6 +592,8 @@ class SciRCM:
                                                          enumerate(self.df[self.reg_grp_2_lbl].values)]
             self.df[f'{self.reg_grp_3_lbl}_filtered'] = [c if bg[i] not in conds else 'None' for i, c in
                                                          enumerate(self.df[self.reg_grp_3_lbl].values)]
+            self.df[f'{self.reg_grp_4_lbl}_filtered'] = [c if bg[i] not in conds else 'None' for i, c in
+                                                         enumerate(self.df[self.reg_grp_4_lbl].values)]
         elif bg_type == '(P&M)|(P&R)':  # Protein and one other
             conds = ['NS + NS + NS', 'NS + NS + threshold', 'NS + threshold + NS', 'threshold + NS + NS',
                      'threshold + NS + NS']
@@ -548,10 +603,13 @@ class SciRCM:
                                                          enumerate(self.df[self.reg_grp_2_lbl].values)]
             self.df[f'{self.reg_grp_3_lbl}_filtered'] = [c if bg[i] not in conds else 'None' for i, c in
                                                          enumerate(self.df[self.reg_grp_3_lbl].values)]
+            self.df[f'{self.reg_grp_4_lbl}_filtered'] = [c if bg[i] not in conds else 'None' for i, c in
+                                                         enumerate(self.df[self.reg_grp_4_lbl].values)]
         elif bg_type == '*':  # Use all genes as the background
             self.df[f'{self.reg_grp_1_lbl}_filtered'] = [c for i, c in enumerate(self.df[self.reg_grp_1_lbl].values)]
             self.df[f'{self.reg_grp_2_lbl}_filtered'] = [c for i, c in enumerate(self.df[self.reg_grp_2_lbl].values)]
             self.df[f'{self.reg_grp_3_lbl}_filtered'] = [c for i, c in enumerate(self.df[self.reg_grp_3_lbl].values)]
+            self.df[f'{self.reg_grp_4_lbl}_filtered'] = [c for i, c in enumerate(self.df[self.reg_grp_4_lbl].values)]
 
     def get_df(self):
         return self.df
