@@ -7,6 +7,9 @@ If you have issues installing, please try the simple version (which doesn't have
 
 If you want to read more about how SiRCle works, please check out our paper: https://www.biorxiv.org/content/10.1101/2022.07.02.498058v1 
 
+Website is available at: https://arianemora-sircle-web-app-ndu996.streamlit.app it is under active development and currently in Beta mode - let us know if you have any issues :) 
+Note the website is only for the first bit of the regulatory clustering.
+
 ## Install
 Optionally create a new conda env.
 ```
