@@ -87,7 +87,7 @@ class TestSciRCM(TestClass):
         for i, tst_label in enumerate(df['RG2_Changes'].values):
             if true_labels[i]:  # Otherwise we'd be testing between 0 and null
                 print(genes[i])
-                assert true_labels[i].strip() == tst_label
+                assert true_labels[i].strip().replace('+', '_') == tst_label
             else:
                 print(genes[i])
                 assert tst_label == "None"
