@@ -70,10 +70,11 @@ class TestSciRCM(TestClass):
                  reg_grp_3_lbl='Regulation_Grouping_3',
                  main_reg_label='Regulation_Grouping_2'
         """
-        rcm_file = 'data/all_1311.csv'
-        rcm = SciRCM(rcm_file, rcm_file, rcm_file, "RNA", "rna_padj", "methylation", "meth_padj",
-                     "Protein", "protein_padj", "gene_name", sep=',',  bg_type='(P&M)|(P&R)',
-                     rna_padj_cutoff=0.05, prot_padj_cutoff=0.05, meth_padj_cutoff=0.05,
+        rcm_file = 'data/FINAL_TABLE.csv.csv'
+        rcm = SciRCM('data/FINAL_TABLE_CpG.csv', 'data/FINAL_TABLE_RNA.csv', 'data/FINAL_TABLE_Protein.csv',
+                     "rna_logfc", "rna_padj", "meth_diff", "meth_padj",
+                     "protein_logfc", "protein_padj", "gene_name", sep=',',  bg_type='(P&M)|(P&R)',
+                     rna_padj_cutoff=0.1, prot_padj_cutoff=0.1, meth_padj_cutoff=0.1,
                      rna_logfc_cutoff=0.5, prot_logfc_cutoff=0.1, meth_diff_cutoff=0.1,
                      )
         rcm.run()
@@ -81,9 +82,9 @@ class TestSciRCM(TestClass):
         df = rcm.get_df()
         print(df.columns)
         # Check the "label" column equals the reg label colum
-        true_labels = df['Grouping2_m'].values
+        true_labels = df['Regulation Grouping Changes (RG2)'].values
         genes = df['gene_name'].values
-        for i, tst_label in enumerate(df['Regulation_Grouping_2'].values):
+        for i, tst_label in enumerate(df['RG2_Changes'].values):
             if true_labels[i]:  # Otherwise we'd be testing between 0 and null
                 print(genes[i])
                 assert true_labels[i].strip() == tst_label

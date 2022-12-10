@@ -29,43 +29,6 @@ class SciRCMException(SciException):
 
 """
 Sci-RCM is the logical regulatory clustering of genes based on DNA-methylation, RNA-seq and Proteomics data.
-
-| Methylation      | RNA-seq   | Proteomics | Regulation driver                       | Regulation Grouping2 |
-|------------------|-----------|------------|-----------------------------------------|----------------------|
-| Hypomethylation  | UP        | UP         | Methylation decrease                    | MDE                  |
-| Hypermethylation | DOWN      | DOWN       | Methylation increase                    | MDS                  |
-| Hypermethylation | No Change | No Change  | Methylation increase                    | None                 |
-| Hypermethylation | DOWN      | No Change  | Methylation increase                    | S_ncRNA              |
-| Hypermethylation | UP        | No Change  | Methylation increase & mRNA increase    | E_ncRNA              |
-| No Change        | UP        | No Change  | mRNA increase                           | E_ncRNA              |
-| Hypermethylation | DOWN      | No Change  | Methylation increase & Protein increase | MDS+TMDE             |
-| Hypermethylation | DOWN      | UP         | Protein increase                        | TMDE                 |
-| Hypermethylation | No Change | UP         | Protein increase                        | TMDE                 |
-| Hypermethylation | No Change | DOWN       | Protein decrease                        | TMDS                 |
-| Hypermethylation | UP        | UP         | mRNA increase                           | TPDE                 |
-| Hypermethylation | UP        | DOWN       | mRNA increase & Protein decrease        | TPDE+TMDS            |
-| Hypermethylation | UP        | No Change  | mRNA increase & Protein decrease        | TPDE+TMDS            |
-| Hypomethylation  | No Change | No Change  | Methylation decrease                    | None                 |
-| Hypomethylation  | DOWN      | No Change  | Methylation decrease & mRNA decrease    | S_ncRNA              |
-| Hypomethylation  | UP        | No Change  | Methylation decrease                    | E_ncRNA              |
-| No Change        | DOWN      | No Change  | mRNA decrease                           | S_ncRNA              |
-| Hypomethylation  | UP        | No Change  | Methylation decrease & Protein decrease | MDE+TMDS             |
-| Hypomethylation  | No Change | UP         | Protein increase                        | TMDE                 |
-| Hypomethylation  | UP        | DOWN       | Protein decrease                        | TMDS                 |
-| Hypomethylation  | No Change | DOWN       | Protein decrease                        | TMDS                 |
-| Hypomethylation  | DOWN      | DOWN       | mRNA decrease                           | TPDS                 |
-| Hypomethylation  | DOWN      | UP         | mRNA decrease & Protein increase        | TPDS+TMDE            |
-| Hypomethylation  | DOWN      | No Change  | mRNA decrease & Protein increase        | TPDS+TMDE            |
-| No Change        | No Change | UP         | Protein increase                        | TMDE                 |
-| No Change        | No Change | DOWN       | Protein decrease                        | TMDS                 |
-| No Change        | UP        | UP         | mRNA increase                           | TPDE                 |
-| No Change        | UP        | DOWN       | mRNA increase & Protein decrease        | TPDE+TMDS            |
-| No Change        | UP        | No Change  | mRNA increase & Protein decrease        | TPDE+TMDS            |
-| No Change        | DOWN      | DOWN       | mRNA decrease                           | TPDS                 |
-| No Change        | DOWN      | UP         | mRNA decrease & Protein increase        | TPDS+TMDE            |
-| No Change        | DOWN      | No Change  | mRNA decrease & Protein increase        | TPDS+TMDE            |
-| No Change        | No Change | No Change  | None                                    | None                 |
-
 """
 
 
@@ -506,8 +469,6 @@ class SciRCM:
                 reg_label_2.append('TPDE')
                 reg_label_3.append('TPDE')
                 reg_label_4.append('TPDE')
-
-
 
             else:
                 reg_label_2.append('None')
