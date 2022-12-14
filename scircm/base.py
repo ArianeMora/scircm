@@ -569,7 +569,7 @@ class SciRCM:
                                                          enumerate(self.df[self.reg_grp_2_lbl].values)]
             self.df[f'{self.reg_grp_3_lbl}_filtered'] = [c if bg[i] not in conds else 'Not-Background' for i, c in
                                                          enumerate(self.df[self.reg_grp_3_lbl].values)]
-            self.df[f'{self.reg_grp_4_lbl}_filtered'] = [c if bg[i] not in conds else 'Not-Background' for i, c in
+            self.df[f'{self.reg_grp_4_lbl}_filtered'] = [c if bg[i] not in conds else '"Not-Background"' for i, c in
                                                          enumerate(self.df[self.reg_grp_4_lbl].values)]
         elif bg_type == '*':  # Use all genes as the background
             self.df[f'{self.reg_grp_1_lbl}_filtered'] = [c for i, c in enumerate(self.df[self.reg_grp_1_lbl].values)]
