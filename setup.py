@@ -45,7 +45,7 @@ setup(name='scircm',
               'scircm = scircm.__main__:main'
           ]
       },
-      install_requires=['pandas', 'numpy', 'scibiomart', 'sciutil>=1.0.3', 'scivae', 'sklearn', 'sciviso',
+      install_requires=['pandas', 'numpy', 'scibiomart', 'sciutil>=1.0.3', 'scivae', 'scikit-learn', 'sciviso',
                         'seaborn', 'stats', 'matplotlib_venn', 'scimotf', 'scie2g'],
       python_requires='>=3.6',
       data_files=[("", ["LICENSE"])]
