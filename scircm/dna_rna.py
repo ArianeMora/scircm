@@ -48,8 +48,8 @@ class SciMR(SciRCM):
         self.meth_padj = meth_padj
         self.gene_id = gene_id
         self.logfile = open(logfile, "w+") if logfile is not None else None  # File for logging results
-        self.rna_padj_cutoff, self.meth_padj_cutoff, self.prot_padj_cutoff = rna_padj_cutoff, meth_padj_cutoff
-        self.rna_logfc_cutoff, self.meth_diff_cutoff, self.prot_logfc_cutoff = rna_logfc_cutoff, meth_diff_cutoff
+        self.rna_padj_cutoff, self.meth_padj_cutoff = rna_padj_cutoff, meth_padj_cutoff
+        self.rna_logfc_cutoff, self.meth_diff_cutoff = rna_logfc_cutoff, meth_diff_cutoff
         self.debug = debug_on
         self.output_dir = output_dir
         self.reg_grp_1_lbl = reg_grp_1_lbl
@@ -167,36 +167,35 @@ class SciMR(SciRCM):
             background_filter.append(background)
             state_label = f'{methylation_state} + {rna_state}'
 
-            if state_label == 'Hypermethylation + RNA DOWN + Protein Undetected':  # State 7
+            if state_label == 'Hypermethylation + RNA DOWN':  # State 7
                 reg_label_2.append('MDS')
                 reg_label_3.append('MDS')
-            elif state_label == 'Hypermethylation + RNA No change + Protein Undetected':  # State 8
+            elif state_label == 'Hypermethylation + RNA No change':  # State 8
                 reg_label_2.append('None')  # This would only be included if we have the non-coding groups
                 reg_label_3.append('None')
-            elif state_label == 'Hypermethylation + RNA UP + Protein Undetected':  # State 9
+            elif state_label == 'Hypermethylation + RNA UP':  # State 9
                 reg_label_2.append('TPDE')
                 reg_label_3.append('MDS_TPDE')
 
-            elif state_label == 'Hypomethylation + RNA DOWN + Protein Undetected':  # State 22
+            elif state_label == 'Hypomethylation + RNA DOWN':  # State 22
                 reg_label_2.append('TPDS')
                 reg_label_3.append('MDE_TPDS')
-            elif state_label == 'Hypomethylation + RNA No change + Protein Undetected':  # State 23
+            elif state_label == 'Hypomethylation + RNA No change':  # State 23
                 reg_label_2.append('None')  # This would only be included if we have the non-coding groups
                 reg_label_3.append('None')
-            elif state_label == 'Hypomethylation + RNA UP + Protein Undetected':  # State 24
+            elif state_label == 'Hypomethylation + RNA UP':  # State 24
                 reg_label_2.append('MDE')
-                reg_label_2.append('MDE')
+                reg_label_3.append('MDE')
 
-            elif state_label == 'Methylation No change + RNA DOWN + Protein Undetected':  # State 31
+            elif state_label == 'Methylation No change + RNA DOWN':  # State 31
                 reg_label_2.append('TPDS')
                 reg_label_3.append('TPDS')
-            elif state_label == 'Methylation No change + RNA No change + Protein Undetected':  # State 32
+            elif state_label == 'Methylation No change + RNA No change':  # State 32
                 reg_label_2.append('None')  # This would only be included if we have the non-coding groups
                 reg_label_3.append('None')
-            elif state_label == 'Methylation No change + RNA UP + Protein Undetected':  # State 33
-                reg_label_2.append('TPDE_')
+            elif state_label == 'Methylation No change + RNA UP':  # State 33
+                reg_label_2.append('TPDE')
                 reg_label_3.append('TPDE')
-
             else:
                 reg_label_2.append('None')
                 reg_label_3.append('None')

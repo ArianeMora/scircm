@@ -20,7 +20,7 @@ import os
 import shutil
 import tempfile
 import unittest
-from scircm import SciRCM, SciRP
+from scircm import SciRCM, SciRP, SciMR
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 
@@ -109,6 +109,27 @@ class TestSciRCM(TestClass):
         for i, tst_label in enumerate(df['RG2_Changes'].values):
             if true_labels[i]:  # Otherwise we'd be testing between 0 and null
                 print(genes[i])
+                assert true_labels[i].strip().replace('+', '_') == tst_label
+            else:
+                print(genes[i])
+                assert tst_label == "None"
+
+    def test_RNA_Methylation(self):
+        rcm = SciMR('data/FINAL_TABLE_MethylationRNA_Meth.csv', 'data/FINAL_TABLE_MethylationRNA_RNA.csv',
+                     "rna_logfc", "rna_padj", "meth_diff", "meth_padj",
+                     "gene_name", sep=',', bg_type='M|R',
+                     rna_padj_cutoff=0.1, meth_padj_cutoff=0.1,
+                     rna_logfc_cutoff=0.5, meth_diff_cutoff=0.1)
+        rcm.run()
+        # Read in the output file
+        df = rcm.get_df()
+        print(df.columns)
+        # Check the "label" column equals the reg label colum
+        true_labels = df['Regulation Grouping Changes (RG2)_m'].values
+        genes = df['gene_name'].values
+        for i, tst_label in enumerate(df['RG2_Changes'].values):
+            if true_labels[i]:  # Otherwise we'd be testing between 0 and null
+                print(genes[i], true_labels[i].strip().replace('+', '_'), tst_label)
                 assert true_labels[i].strip().replace('+', '_') == tst_label
             else:
                 print(genes[i])
