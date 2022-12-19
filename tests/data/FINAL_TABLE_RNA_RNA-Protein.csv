@@ -1,0 +1,19 @@
+﻿RNA-seq,Proteomics,Proteomics_Detection,Regulation Grouping All (RG1),Regulation Grouping Changes (RG2),Regulation Grouping Protein (RG3),Regulation Grouping Detection (RG4),gene_name,rna_logfc,rna_padj
+DOWN,DOWN,DOWN,No Change + DOWN + DOWN,TPDS,TPDS,TPDS,3,-1,0.05
+DOWN,No Change,Not detected,No Change + DOWN + Not detected,TPDS+TMDE,TPDS,TPDS,13,-1,0.05
+DOWN,No Change,Not significant,No Change + DOWN + Not significant,TPDS+TMDE,None,TPDS+TMDE,22,-1,0.05
+DOWN,No Change,Significant negative,No Change + DOWN + Significant negative,TPDS+TMDE,TPDS,TPDS,31,-1,0.05
+DOWN,No Change,Significant positive,No Change + DOWN + Significant positive,TPDS+TMDE,TMDE,TPDS+TMDE,39,-1,0.05
+DOWN,UP,UP,No Change + DOWN + UP,TPDS+TMDE,TMDE,TPDS+TMDE,47,-1,0.05
+No Change,DOWN,DOWN,No Change + No Change + DOWN,TMDS,TMDS,TMDS,6,0,0.05
+No Change,No Change,Not detected,No Change + No Change + Not detected,None,None,None,16,0,0.05
+No Change,No Change,Not significant,No Change + No Change + Not significant,None,None,None,25,0,0.05
+No Change,,Significant negative,,None,None,None,87,0,0.05
+No Change,,Significant positive,,None,None,None,88,0,0.05
+No Change,UP,UP,No Change + No Change + UP,TMDE,TMDE,TMDE,50,0,0.05
+UP,DOWN,DOWN,No Change + UP + DOWN,TPDE+TMDS,TMDS,TPDE+TMDS,9,1,0.05
+UP,No Change,Not detected,No Change + UP + Not detected,TPDE+TMDS,TPDE,TPDE,19,1,0.05
+UP,No Change,Not significant,No Change + UP + Not significant,TPDE+TMDS,None,TPDE+TMDS,28,1,0.05
+UP,No Change,Significant negative,No Change + UP + Significant negative,TPDE+TMDS,TMDS,TPDE+TMDS,36,1,0.05
+UP,No Change,Significant positive,No Change + UP + Significant positive,TPDE+TMDS,TPDE,TPDE,44,1,0.05
+UP,UP,UP,No Change + UP + UP,TPDE,TPDE,TPDE,53,1,0.05

@@ -1,0 +1,55 @@
+﻿Methylation,RNA-seq,Proteomics,Proteomics_Detection,Regulation Grouping All (RG1),Regulation Grouping Changes (RG2),Regulation Grouping Protein (RG3),Regulation Grouping Detection (RG4),meth_diff,meth_padj,gene_name,protein_logfc,protein_padj,rna_logfc,rna_padj
+Hypermethylation,DOWN,DOWN,DOWN,Hypermethylation + DOWN + DOWN,MDS,MDS,MDS,1,0.05,1,-1,0.05,-1,0.05
+Hypomethylation,DOWN,DOWN,DOWN,Hypomethylation + DOWN + DOWN,TPDS,TPDS,TPDS,-1,0.05,2,-1,0.05,-1,0.05
+No Change,DOWN,DOWN,DOWN,No Change + DOWN + DOWN,TPDS,TPDS,TPDS,0,0.05,3,-1,0.05,-1,0.05
+Hypermethylation,DOWN,No Change,Not detected,Hypermethylation + DOWN + Not detected,MDS+TMDE,MDS,MDS,1,0.05,11,,,-1,0.05
+Hypomethylation,DOWN,No Change,Not detected,Hypomethylation + DOWN + Not detected,TPDS+TMDE,TPDS,TPDS,-1,0.05,12,,,-1,0.05
+No Change,DOWN,No Change,Not detected,No Change + DOWN + Not detected,TPDS+TMDE,TPDS,TPDS,1,1,13,,,-1,0.05
+Hypermethylation,DOWN,No Change,Not significant,Hypermethylation + DOWN + Not significant,MDS+TMDE,None,MDS+TMDE,1,0.05,20,0,0.5,-1,0.05
+Hypomethylation,DOWN,No Change,Not significant,Hypomethylation + DOWN + Not significant,TPDS+TMDE,None,TPDS+TMDE,-1,0.05,21,0,0.5,-1,0.05
+No Change,DOWN,No Change,Not significant,No Change + DOWN + Not significant,TPDS+TMDE,None,TPDS+TMDE,-1,1,22,0,0.5,-1,0.05
+Hypermethylation,DOWN,No Change,Significant negative,Hypermethylation + DOWN + Significant negative,MDS+TMDE,MDS,MDS,1,0.05,29,-0.1,0.05,-1,0.05
+Hypomethylation,DOWN,No Change,Significant negative,Hypomethylation + DOWN + Significant negative,TPDS+TMDE,TPDS,TPDS,-1,0.05,30,-0.1,0.05,-1,0.05
+No Change,DOWN,No Change,Significant negative,No Change + DOWN + Significant negative,TPDS+TMDE,TPDS,TPDS,0,1,31,-0.1,0.05,-1,0.05
+Hypermethylation,DOWN,No Change,Significant positive,Hypermethylation + DOWN + Significant positive,MDS+TMDE,TMDE,MDS+TMDE,1,0.05,37,0.1,0.05,-1,0.05
+Hypomethylation,DOWN,No Change,Significant positive,Hypomethylation + DOWN + Significant positive,TPDS+TMDE,TMDE,TPDS+TMDE,-1,0.05,38,0.1,0.05,-1,0.05
+No Change,DOWN,No Change,Significant positive,No Change + DOWN + Significant positive,TPDS+TMDE,TMDE,TPDS+TMDE,,,39,0.1,0.05,-1,0.05
+Hypermethylation,DOWN,UP,UP,Hypermethylation + DOWN + UP,MDS+TMDE,TMDE,MDS+TMDE,1,0.05,45,1,0.05,-1,0.05
+Hypomethylation,DOWN,UP,UP,Hypomethylation + DOWN + UP,TPDS+TMDE,TMDE,TPDS+TMDE,-1,0.05,46,1,0.05,-1,0.05
+No Change,DOWN,UP,UP,No Change + DOWN + UP,TPDS+TMDE,TMDE,TPDS+TMDE,,,47,1,0.05,-1,0.05
+Hypermethylation,No Change,DOWN,DOWN,Hypermethylation + No Change + DOWN,TMDS,TMDS,TMDS,1,0.05,4,-1,0.05,0,0.05
+Hypomethylation,No Change,DOWN,DOWN,Hypomethylation + No Change + DOWN,TMDS,TMDS,TMDS,-1,0.05,5,-1,0.05,0,0.05
+No Change,No Change,DOWN,DOWN,No Change + No Change + DOWN,TMDS,TMDS,TMDS,0,1,6,-1,0.05,0,0.05
+Hypermethylation,No Change,No Change,Not detected,Hypermethylation + No Change + Not detected,None,None,None,1,0.05,14,,,0,0.05
+Hypomethylation,No Change,No Change,Not detected,Hypomethylation + No Change + Not detected,None,None,None,-1,0.05,15,,,0,0.05
+No Change,No Change,No Change,Not detected,No Change + No Change + Not detected,None,None,None,,,16,,,0,0.05
+Hypermethylation,No Change,No Change,Not significant,Hypermethylation + No Change + Not significant,None,None,None,1,0.05,23,0,0.5,0,0.05
+Hypomethylation,No Change,No Change,Not significant,Hypomethylation + No Change + Not significant,None,None,None,-1,0.05,24,0,0.5,0,0.05
+No Change,No Change,No Change,Not significant,No Change + No Change + Not significant,None,None,None,,,25,0,0.5,0,0.05
+Hypermethylation,No Change,No Change,Significant negative,Hypermethylation + No Change + Significant negative,None,None,None,1,0.05,32,-0.1,0.05,0,0.05
+Hypomethylation,No Change,No Change,Significant negative,Hypomethylation + No Change + Significant negative,None,None,None,-1,0.05,33,-0.1,0.05,0,0.05
+No Change,No Change,,Significant negative,,None,None,None,,,87,-0.1,0.05,0,0.05
+Hypermethylation,No Change,No Change,Significant positive,Hypermethylation + No Change + Significant positive,None,None,None,1,0.05,40,0.1,0.05,0,0.05
+Hypomethylation,No Change,No Change,Significant positive,Hypomethylation + No Change + Significant positive,None,None,None,-1,0.05,41,0.1,0.05,0,0.05
+No Change,No Change,,Significant positive,,None,None,None,,,88,0.1,0.05,0,0.05
+Hypermethylation,No Change,UP,UP,Hypermethylation + No Change + UP,TMDE,TMDE,TMDE,1,0.05,48,1,0.05,0,0.05
+Hypomethylation,No Change,UP,UP,Hypomethylation + No Change + UP,TMDE,TMDE,TMDE,-1,0.05,49,1,0.05,0,0.05
+No Change,No Change,UP,UP,No Change + No Change + UP,TMDE,TMDE,TMDE,,,50,1,0.05,0,0.05
+Hypermethylation,UP,DOWN,DOWN,Hypermethylation + UP + DOWN,TPDE+TMDS,TMDS,TPDE+TMDS,1,0.05,7,-1,0.05,1,0.05
+Hypomethylation,UP,DOWN,DOWN,Hypomethylation + UP + DOWN,MDE+TMDS,TMDS,MDE+TMDS,-1,0.05,8,-1,0.05,1,0.05
+No Change,UP,DOWN,DOWN,No Change + UP + DOWN,TPDE+TMDS,TMDS,TPDE+TMDS,1,1,9,-1,0.05,1,0.05
+Hypermethylation,UP,No Change,Not detected,Hypermethylation + UP + Not detected,TPDE+TMDS,TPDE,TPDE,1,0.05,17,,,1,0.05
+Hypomethylation,UP,No Change,Not detected,Hypomethylation + UP + Not detected,MDE+TMDS,MDE,MDE,-1,0.05,18,,,1,0.05
+No Change,UP,No Change,Not detected,No Change + UP + Not detected,TPDE+TMDS,TPDE,TPDE,-1,1,19,,,1,0.05
+Hypermethylation,UP,No Change,Not significant,Hypermethylation + UP + Not significant,TPDE+TMDS,None,TPDE+TMDS,1,0.05,26,0,0.5,1,0.05
+Hypomethylation,UP,No Change,Not significant,Hypomethylation + UP + Not significant,MDE+TMDS,None,MDE+TMDS,-1,0.05,27,0,0.5,1,0.05
+No Change,UP,No Change,Not significant,No Change + UP + Not significant,TPDE+TMDS,None,TPDE+TMDS,-1,1,28,0,0.5,1,0.05
+Hypermethylation,UP,No Change,Significant negative,Hypermethylation + UP + Significant negative,TPDE+TMDS,TMDS,TPDE+TMDS,1,0.05,34,-0.1,0.05,1,0.05
+Hypomethylation,UP,No Change,Significant negative,Hypomethylation + UP + Significant negative,MDE+TMDS,TMDS,MDE+TMDS,-1,0.05,35,-0.1,0.05,1,0.05
+No Change,UP,No Change,Significant negative,No Change + UP + Significant negative,TPDE+TMDS,TMDS,TPDE+TMDS,,,36,-0.1,0.05,1,0.05
+Hypermethylation,UP,No Change,Significant positive,Hypermethylation + UP + Significant positive,TPDE+TMDS,TPDE,TPDE,1,0.05,42,0.1,0.05,1,0.05
+Hypomethylation,UP,No Change,Significant positive,Hypomethylation + UP + Significant positive,MDE+TMDS,MDE,MDE,-1,0.05,43,0.1,0.05,1,0.05
+No Change,UP,No Change,Significant positive,No Change + UP + Significant positive,TPDE+TMDS,TPDE,TPDE,,,44,0.1,0.05,1,0.05
+Hypermethylation,UP,UP,UP,Hypermethylation + UP + UP,TPDE,TPDE,TPDE,1,0.05,51,1,0.05,1,0.05
+Hypomethylation,UP,UP,UP,Hypomethylation + UP + UP,MDE,MDE,MDE,-1,0.05,52,1,0.05,1,0.05
+No Change,UP,UP,UP,No Change + UP + UP,TPDE,TPDE,TPDE,,,53,1,0.05,1,0.05

@@ -25,5 +25,6 @@ __license__ = 'GPL3'
 
 from scircm.base import SciRCM, filter_methylation_data_by_genes
 from scircm.vis import plot_cluster_ORA
-from scircm.rcm_noprot import SciRCMnp
+from scircm.dna_rna import SciRCMnp
 from scircm.stats import RCMStats
+from scircm.rna_protein import SciRP

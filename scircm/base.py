@@ -61,7 +61,7 @@ class SciRCM:
                  reg_grp_2_lbl='RG2_Changes',
                  reg_grp_3_lbl='RG3_Translation',
                  main_reg_label='RG2_Changes',
-                 reg_grp_4_lbl='RG4_Detection'):
+                 reg_grp_4_lbl='RG4_Detection', check_inputs=True):
         self.u = SciUtil() if sciutil is None else sciutil
         plt.rcParams['svg.fonttype'] = 'none'
         self.meth_diff = meth_diff
@@ -82,29 +82,30 @@ class SciRCM:
         self.reg_grp_3_lbl = reg_grp_3_lbl
         self.reg_grp_4_lbl = reg_grp_4_lbl
         self.main_reg_label = main_reg_label
-        if main_reg_label != reg_grp_2_lbl and main_reg_label != reg_grp_1_lbl and main_reg_label != reg_grp_3_lbl:
-            self.u.err_p([f'ERROR: your main regulatory label (main_reg_label) must be one of: '
-                          f'{reg_grp_1_lbl}, {reg_grp_2_lbl} or {reg_grp_3_lbl}, you passed: ', main_reg_label])
-        # Otherwise this will be in the specific ones.
-        if prot_logfc and rna_logfc and meth_diff:
-            self.output_filename = output_filename if output_filename else f'scircm_r{rna_logfc_cutoff}-{rna_padj_cutoff}' \
-                                                                       f'_p{prot_logfc_cutoff}-{prot_padj_cutoff}' \
-                                                                       f'_m{meth_diff_cutoff}-{meth_padj_cutoff}.csv'
-            if isinstance(meth_file, str):
-                self.meth_df = pd.read_csv(meth_file, sep=sep)
-                self.rna_df = pd.read_csv(rna_file, sep=sep)
-                self.prot_df = pd.read_csv(proteomics_file, sep=sep)
+        if check_inputs:
+            if main_reg_label != reg_grp_2_lbl and main_reg_label != reg_grp_1_lbl and main_reg_label != reg_grp_3_lbl:
+                self.u.err_p([f'ERROR: your main regulatory label (main_reg_label) must be one of: '
+                              f'{reg_grp_1_lbl}, {reg_grp_2_lbl} or {reg_grp_3_lbl}, you passed: ', main_reg_label])
+            # Otherwise this will be in the specific ones.
+            if prot_logfc and rna_logfc and meth_diff:
+                self.output_filename = output_filename if output_filename else f'scircm_r{rna_logfc_cutoff}-{rna_padj_cutoff}' \
+                                                                           f'_p{prot_logfc_cutoff}-{prot_padj_cutoff}' \
+                                                                           f'_m{meth_diff_cutoff}-{meth_padj_cutoff}.csv'
+                if isinstance(meth_file, str):
+                    self.meth_df = pd.read_csv(meth_file, sep=sep)
+                    self.rna_df = pd.read_csv(rna_file, sep=sep)
+                    self.prot_df = pd.read_csv(proteomics_file, sep=sep)
+                else:
+                    self.meth_df = meth_file
+                    self.rna_df = rna_file
+                    self.prot_df = proteomics_file
+            self.bg_list = ['(P&M)|(P&R)', '(P&M)|(P&R)|(M&R)', '*', 'P&M&R', 'P|M|R', 'P|R', 'P&R',
+                            'P|(M&R)']
+            if bg_type not in self.bg_list:
+                self.u.err_p(['ERROR: selected background type was not allowed, please choose from one of: ', self.bg_list,
+                              '\n Note: | means OR and & means AND'])
             else:
-                self.meth_df = meth_file
-                self.rna_df = rna_file
-                self.prot_df = proteomics_file
-        self.bg_list = ['(P&M)|(P&R)', '(P&M)|(P&R)|(M&R)', '*', 'P&M&R', 'P|M|R', 'P|R', 'P&R',
-                        'P|(M&R)']
-        if bg_type not in self.bg_list:
-            self.u.err_p(['ERROR: selected background type was not allowed, please choose from one of: ', self.bg_list,
-                          '\n Note: | means OR and & means AND'])
-        else:
-            self.bg_type = bg_type
+                self.bg_type = bg_type
 
         self.non_coding_genes = non_coding_genes
         # Contains genes for the non-coding region (use for human only).

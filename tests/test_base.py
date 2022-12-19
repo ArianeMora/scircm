@@ -20,7 +20,7 @@ import os
 import shutil
 import tempfile
 import unittest
-from scircm import SciRCM, SciRCMnp
+from scircm import SciRCM, SciRP
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 
@@ -76,6 +76,28 @@ class TestSciRCM(TestClass):
                      "protein_logfc", "protein_padj", "gene_name", sep=',',  bg_type='(P&M)|(P&R)',
                      rna_padj_cutoff=0.1, prot_padj_cutoff=0.1, meth_padj_cutoff=0.1,
                      rna_logfc_cutoff=0.5, prot_logfc_cutoff=0.1, meth_diff_cutoff=0.1,
+                     )
+        rcm.run()
+        # Read in the output file
+        df = rcm.get_df()
+        print(df.columns)
+        # Check the "label" column equals the reg label colum
+        true_labels = df['Regulation Grouping Changes (RG2)'].values
+        genes = df['gene_name'].values
+        for i, tst_label in enumerate(df['RG2_Changes'].values):
+            if true_labels[i]:  # Otherwise we'd be testing between 0 and null
+                print(genes[i])
+                assert true_labels[i].strip().replace('+', '_') == tst_label
+            else:
+                print(genes[i])
+                assert tst_label == "None"
+
+    def test_RNA_protein(self):
+        rcm = SciRP('data/FINAL_TABLE_RNA_RNA-Protein.csv', 'data/RNA_Protein_ONLY_Final_table.csv',
+                     "rna_logfc", "rna_padj",
+                     "protein_logfc", "protein_padj", "gene_name", sep=',',  bg_type='*',
+                     rna_padj_cutoff=0.1, prot_padj_cutoff=0.1,
+                     rna_logfc_cutoff=0.5, prot_logfc_cutoff=0.1,
                      )
         rcm.run()
         # Read in the output file
