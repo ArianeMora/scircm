@@ -17,10 +17,8 @@
 
 import numpy as np
 import pandas as pd
-import os
 from sciutil import SciUtil, SciException
 import matplotlib.pyplot as plt
-from scipy.stats import combine_pvalues
 
 
 class SciRCMException(SciException):

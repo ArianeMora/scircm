@@ -347,13 +347,13 @@ class RCMStats:
                           '\n vs columns in your protein sample file: ', self.protein_sample_df[self.column_id].values])
             return False
         if len(rna_cols) == 0:
-            self.u.err_p([f'You made a mistake...  {self.column_id} does not actually map to your protein data file?',
+            self.u.err_p([f'You made a mistake...  {self.column_id} does not actually map to your RNA data file?',
                           'columns in your protein data file:', self.rna_data.columns,
                           '\n vs columns in your protein sample file: ', self.rna_sample_df[self.column_id].values])
             return False
 
         if len(methylation_cols) == 0:
-            self.u.err_p([f'You made a mistake...  {self.column_id} does not actually map to your protein data file?',
+            self.u.err_p([f'You made a mistake...  {self.column_id} does not actually map to your Methylation data file?',
                           'columns in your protein data file:', self.meth_data.columns,
                           '\n vs columns in your protein sample file: ', self.meth_sample_df[self.column_id].values])
             return False
