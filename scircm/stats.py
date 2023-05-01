@@ -104,13 +104,13 @@ class RCMStats:
         for reg_label in self.encoded_df:
             df = self.encoded_df[reg_label]
             df[self.regulatory_label] = reg_label
-            encoded_df = encoded_df.append(df)
+            encoded_df = pd.concat([encoded_df, df])
             df = self.vae_input_df[reg_label]
             df[self.regulatory_label] = reg_label
-            input_df = input_df.append(df)
+            input_df = pd.concat([input_df, df])
             df = self.raw_input_df[reg_label]
             df[self.regulatory_label] = reg_label
-            raw_df = raw_df.append(df)
+            raw_df = pd.concat([raw_df, df])
         encoded_df.to_csv(f'{self.output_folder}encoded_df_{self.run_name}.csv')
         input_df.to_csv(f'{self.output_folder}vae_input_df_{self.run_name}.csv')
         raw_df.to_csv(f'{self.output_folder}raw_input_df_{self.run_name}.csv')
@@ -447,7 +447,7 @@ class RCMStats:
 
             self.test_for_normality(stats_df[f'Integrated mean ({cond0})'], f'{reg_label} Integrated mean ({cond0})')
             self.test_for_normality(stats_df[f'Integrated mean ({cond1})'], f'{reg_label} Integrated mean ({cond1})')
-            all_stats = all_stats.append(stats_df)
+            all_stats = pd.concat([all_stats, stats_df])
         all_stats.to_csv(f'{self.output_folder}stats_{cond1}-{cond0}_{self.run_name + label}.csv')
         return all_stats
 
@@ -600,7 +600,7 @@ class RCMStats:
                 reg_encoded_df[self.regulatory_label] = reg_label
                 # Keep track of this for quick access
                 self.encoded_df[reg_label] = reg_encoded_df
-                encoded_df = encoded_df.append(reg_encoded_df)
+                encoded_df = pd.concat([encoded_df, reg_encoded_df])
         # Keep track of the patient encodings.
         return encoded_df
 
@@ -647,31 +647,28 @@ class RCMStats:
                 case_genes.append([[c[0] for c in genes_for_patient], [c[1] for c in genes_for_patient]])
             #case_genes = random.sample(list(enumerate(df.index.values)), n_genes)
         for case_idx, case in enumerate(cases):
-            try:
-                case_cond_df = pd.DataFrame()
-                if self.iid:
-                    idval = case_genes[case_idx][1]
-                    case_cond_df['id'] = idval
-                else:
-                    case_cond_df['id'] = list(df.index.values)
-                for col in self.feature_columns:
+            case_cond_df = pd.DataFrame()
+            if self.iid:
+                idval = case_genes[case_idx][1]
+                case_cond_df['id'] = idval
+            else:
+                case_cond_df['id'] = list(df.index.values)
+            for col in self.feature_columns:
 
-                        if self.iid:
-                            valval = case_genes[case_idx][0]
-                            v = df[f'{case}_{col}'].values[valval]
-                            # Just select the single gene that we're interested in
-                            case_cond_df[col] = v
-                        else:
-                            case_cond_df[col] = df[f'{case}_{col}'].values  # Get the column name from the case
+                    if self.iid:
+                        valval = case_genes[case_idx][0]
+                        v = df[f'{case}_{col}'].values[valval]
+                        # Just select the single gene that we're interested in
+                        case_cond_df[col] = v
+                    else:
+                        case_cond_df[col] = df[f'{case}_{col}'].values  # Get the column name from the case
 
-                # Add this to the cond_1_sample_df
-                if len(case_cond_df.columns) == len(self.feature_columns) + 1:  # For the index column
-                    train_df = train_df.append(case_cond_df)
-                    # Add the length of this to the case_ids list so we can extract this patient's information later
-                    case_ids += [case] * len(case_cond_df)
-                    included_cases.append(case)
-            except:
-                continue
+            # Add this to the cond_1_sample_df
+            if len(case_cond_df.columns) == len(self.feature_columns) + 1:  # For the index column
+                train_df = pd.concat([train_df, case_cond_df], ignore_index=True)
+                # Add the length of this to the case_ids list so we can extract this patient's information later
+                case_ids += [case] * len(case_cond_df)
+                included_cases.append(case)
         train_df.set_index('id', inplace=True)
         if filter_extremes:
             z_score = np.abs(stats.zscore(train_df[self.feature_columns].values, axis=1))

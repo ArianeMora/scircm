@@ -44,6 +44,72 @@ class TestClass(unittest.TestCase):
 
 class TestRCMVAE(TestClass):
 
+    def test_run(self):
+        base_dir = '/Users/ariane/Documents/code/roundround/data/sircle_pipeline/sircle_input/stats/'
+        output_dir = f'{base_dir}'
+        data_dir = f'{base_dir}'
+        rcm_file = f'{data_dir}RCM_Renal_cell_carcinoma__NOS.csv'
+        # Now we want to check stats where we use the data that accomnaied those inputs
+        label = 'FINAL'
+
+        meth_file = f'{data_dir}CPTAC_cpg_Renal_cell_carcinoma__NOS.csv'
+        rna_file = f'{data_dir}CPTAC_rna_Renal_cell_carcinoma__NOS.csv'
+        protein_file = f'{data_dir}CPTAC_protein_Renal_cell_carcinoma__NOS.csv'
+
+        meth_sample_file = f'{data_dir}samples_CpG_Renal_cell_carcinoma__NOS.csv'
+        rna_sample_file = f'{data_dir}samples_RNA_Renal_cell_carcinoma__NOS.csv'
+        protein_sample_file = f'{data_dir}samples_protein_Renal_cell_carcinoma__NOS.csv'
+        sv = RCMStats(rcm_file, f'{data_dir}patient_info_Renal_cell_carcinoma__NOS.csv',
+                    meth_file, meth_sample_file, rna_file, rna_sample_file,
+                    protein_file, protein_sample_file,
+                      output_folder=output_dir, column_id='FullLabel',
+                      condition_column='CondID',
+                       patient_id_column='SafeCases',
+                       run_name=label,
+                      regulatory_label='RG2_Changes_filtered',
+                        normalise='rows', missing_method='mean', iid=False)
+        epochs = 2  # To make it quicker to train
+        batch_size = 16
+        num_nodes = 5
+        mmd_weight = 0.25
+        loss = {'loss_type': 'mse', 'distance_metric': 'mmd', 'mmd_weight': mmd_weight}
+        config = {"loss": loss,
+                  "encoding": {"layers": [{"num_nodes": num_nodes, "activation_fn": "relu"}]},
+                  "decoding": {"layers": [{"num_nodes": num_nodes, "activation_fn": "relu"}]},
+                  "latent": {"num_nodes": 1},
+                  "optimiser": {"params": {'learning_rate': 0.01}, "name": "adam"},
+                  "epochs": epochs,
+                  "batch_size": batch_size,
+                  "scale_data": False
+                  }
+        training_cases = ['C3L.00004', 'C3L.00004', 'C3L.00010', 'C3L.00010', 'C3L.00026',
+       'C3L.00026', 'C3L.00079', 'C3L.00079', 'C3L.00103', 'C3L.00103',
+       'C3L.00360', 'C3L.00360', 'C3L.00369', 'C3L.00369', 'C3L.00416',
+       'C3L.00416', 'C3L.00581', 'C3L.00581', 'C3L.00583', 'C3L.00583',
+       'C3L.00606', 'C3L.00606', 'C3L.00607', 'C3L.00607', 'C3L.00814',
+       'C3L.00814', 'C3L.00902', 'C3L.00902', 'C3L.00907', 'C3L.00907',
+       'C3L.00908', 'C3L.00908', 'C3L.00910', 'C3L.00910', 'C3L.00917',
+       'C3L.00917', 'C3L.01302', 'C3L.01302', 'C3L.01313', 'C3L.01313',
+       'C3L.01607', 'C3L.01607', 'C3L.01836', 'C3L.01836', 'C3N.00150',
+       'C3N.00150', 'C3N.00168', 'C3N.00168', 'C3N.00177', 'C3N.00177',
+       'C3N.00310', 'C3N.00310', 'C3N.00314', 'C3N.00314', 'C3N.00390',
+       'C3N.00390', 'C3N.00495', 'C3N.00495', 'C3N.00646', 'C3N.00646',
+       'C3N.00733', 'C3N.00733', 'C3N.00831', 'C3N.00831', 'C3N.00852',
+       'C3N.00852', 'C3N.01176', 'C3N.01176', 'C3N.01178', 'C3N.01178',
+       'C3N.01214', 'C3N.01214', 'C3N.01524', 'C3N.01524', 'C3N.01646',
+       'C3N.01646']
+        sv.train_vae(cases=training_cases, config=config)
+        sv.save()
+        sv.load_saved_vaes()
+        sv.load_saved_inputs(f'{output_dir}vae_input_df_{label}.csv')
+        sv.load_saved_encodings(f'{output_dir}encoded_df_{label}.csv')
+        sv.run_vae_stats(cond_label='gender', cond0='Male', cond1='Female')
+        sv.run_vae_stats(cond_label='AgeGrouped', cond0='young', cond1='old')
+        sv.run_vae_stats(cond_label='TumorStage', cond0='Stage I', cond1='Stage IV')
+        dec = sv.get_decoding('MDS')
+        print(dec)
+
+
     def test_new_stats(self):
         base_dir = '../examples/data/'
         output_dir = f'{base_dir}'
