@@ -48,9 +48,11 @@ class RCMStats:
                  config_file: str = None,
                  regulatory_label='Regulation_Grouping_2',
                  run_name: str = None,
+                 clinical_label: str = None,
                  normalise='rows', verbose=False, missing_method='mean',
                  iid=False):
         self.config_json = f'{config_file}'
+        self.clinical_label = clinical_label
         self.feature_columns = ['RNA-LogFC',
                                 'Protein-LogFC',
                                 'CpG-LogFC',
@@ -751,15 +753,13 @@ class RCMStats:
             cond_0 = list(sample_df[sample_df[self.condition_column] == 0][self.column_id].values)
             cond_0_cols = [c for c in cond_0 if c in list(df.columns)]  # Ensure it is in the cols
             return np.mean(df[cond_0_cols].values, axis=1)
-        if self.missing_method == 'clinical':
+        if self.missing_method == 'clinical' and self.clinical_label != None:
             # For now just do it on patient stage and age of patient
             case_info = self.patient_clinical_df[self.patient_clinical_df[self.patient_id_column] == case_id]
             # Get the information we care about ToDo: generalise
-            age = case_info['AgeGrouped'].values[0]
-            stage = case_info['Stage'].values[0]
+            clin_val = case_info[self.clinical_label].values[0]
             # Now let's get the values for that age and stage
-            other_cases = self.patient_clinical_df[self.patient_clinical_df['AgeGrouped'] == age]
-            other_cases = other_cases[other_cases['Stage'] == stage]
+            other_cases = self.patient_clinical_df[self.patient_clinical_df[self.clinical_label] == clin_val]
             # Now return the values for this for the given label that was asked for.
             cond_0_columns = [c for c in other_cases[f'{label} Normal'].values if c in df.columns]  # The normal values for the cases with same
             # age and stage
