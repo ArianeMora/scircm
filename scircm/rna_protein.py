@@ -305,7 +305,7 @@ class SciRP(SciRCM):
             self.df[f'{self.reg_grp_3_lbl}_filtered'] = [c if bg[i] in conds else 'Not-Background' for i, c in enumerate(self.df[self.reg_grp_3_lbl].values)]
             self.df[f'{self.reg_grp_4_lbl}_filtered'] = [c if bg[i] in conds else 'Not-Background' for i, c in enumerate(self.df[self.reg_grp_4_lbl].values)]
 
-        elif bg_type == 'R':  # RNA
+        elif bg_type == 'P':  # Protein
             conds = ['NS + threshold',
                      'threshold + threshold'
                      ]
