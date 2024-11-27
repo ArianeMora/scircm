@@ -18,7 +18,7 @@
 __title__ = 'scircm'
 __description__ = ''
 __url__ = 'https://github.com/ArianeMora/scircm.git'
-__version__ = '1.1.3'
+__version__ = '1.1.5'
 __author__ = 'Ariane Mora'
 __author_email__ = 'ariane.n.mora@gmail.com'
 __license__ = 'GPL3'

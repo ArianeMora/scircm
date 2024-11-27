@@ -1,30 +1,25 @@
 # sci-RegulatoryClusteringModel
 [![PyPI](https://img.shields.io/pypi/v/scircm)](https://pypi.org/project/scircm/)
 
-## Python version
-This is all for the python version of our package, if you are interested in the R version please go here: https://github.com/ArianeMora/SiRCleR
-If you have issues installing, please try the simple version (which doesn't have the VAE) here: https://github.com/ArianeMora/SiRClePy
-
-If you want to read more about how SiRCle works, please check out our paper: https://www.biorxiv.org/content/10.1101/2022.07.02.498058v1 
-
-Website is available at: https://arianemora-sircle-web-app-ndu996.streamlit.app it is under active development and currently in Beta mode - let us know if you have any issues :) 
-Note the website is only for the first bit of the regulatory clustering.
+## Versions: 
+1. [R version](https://github.com/ArianeMora/SiRCleR)!
+2. [Python without VAE](https://github.com/ArianeMora/SiRClePy)!
 
 ## Install
 Optionally create a new conda env.
 ```
 conda create --name scircm python=3.8
 conda activate scircm
-```
-
-``` 
 pip install scircm
 ```
 
 ## Run
-See the examples folder for a proper tutorial with data included that you can run!
+See the [examples](https://github.com/ArianeMora/scircm/tree/main/examples)! folder for a proper tutorial with data included that you can run!
 
 *If you have any troubles running the tutorial on a windows machine, please let us know and we can help to sort out any issues. 
+
+## Issues
+Please let us know if you have any issues (ariane.n.mora@gmail.com) or via the [issues](https://github.com/ArianeMora/scircm/issues)! tab (preferred).
 
 #### Quick version
 ```
@@ -71,6 +66,15 @@ meth_df = pd.read_csv(f'path to the output from methylation DCpG analysis file')
 # 3) the logFC or test statistic column: here it is 'CpG_Beta_diff'
 filtered_meth_df = filter_methylation_data_by_genes(meth_df, 'ensembl_gene_id', 'padj_meth', 'CpG_Beta_diff')
 ```
+
+## Manuscript
+
+If you want to read more about how SiRCle works, please check out our paper: https://www.biorxiv.org/content/10.1101/2022.07.02.498058v1 
+
+Website is available at: https://arianemora-sircle-web-app-ndu996.streamlit.app it is under active development and currently in Beta mode - let us know if you have any issues :) 
+Note the website is only for the first bit of the regulatory clustering.
+
+
 Now you can run the first version :)
 
 ## Quick guide on the regulation grouping levels
@@ -129,3 +133,6 @@ The general table of how we define regulatory clusters.
 
 Please post questions and issues related to sci-rcm on the `Issues <https://github.com/ArianeMora/scircm/issues>`_  section of the GitHub repository.
 
+
+## Cite
+If you use this please cite our manuscript: https://www.biorxiv.org/content/10.1101/2022.07.02.498058v1 

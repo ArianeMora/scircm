@@ -119,18 +119,21 @@ class RCMStats:
         self.patient_clinical_df.to_csv(f'{self.output_folder}patient_info_{self.run_name}.csv', index=False)
 
     def load_saved_vaes(self):
-        for reg_label in self.rcm[self.regulatory_label].unique():
-            weight_file_path = f'{self.output_folder}{reg_label}-{self.run_name}-VAE-weights.h5'
-            optimizer_file_path = f'{self.output_folder}{reg_label}-{self.run_name}-VAE-optimizer.json'
-            config_json = f'{self.output_folder}{reg_label}-{self.run_name}-VAE-config.json'
-            with open(config_json, "r") as fp:
-                config = json.load(fp)
-            vae_m = VAE(np.ones((20, len(self.feature_columns))), np.ones((20, len(self.feature_columns))),
-                        list(np.ones(20)), config, vae_label=reg_label)
-            # Then decode the data
-            vae_m.load(weight_file_path, optimizer_file_path, config_json)
-            self.trained_vae[reg_label] = vae_m
 
+        for reg_label in self.rcm[self.regulatory_label].unique():
+            try:
+                weight_file_path = f'{self.output_folder}{reg_label}-{self.run_name}-VAE-weights.h5'
+                optimizer_file_path = f'{self.output_folder}{reg_label}-{self.run_name}-VAE-optimizer.json'
+                config_json = f'{self.output_folder}{reg_label}-{self.run_name}-VAE-config.json'
+                with open(config_json, "r") as fp:
+                    config = json.load(fp)
+                vae_m = VAE(np.ones((20, len(self.feature_columns))), np.ones((20, len(self.feature_columns))),
+                            list(np.ones(20)), config, vae_label=reg_label)
+                # Then decode the data
+                vae_m.load(weight_file_path, optimizer_file_path, config_json)
+                self.trained_vae[reg_label] = vae_m
+            except:
+                self.u.warn_p(["Warning: Regulatory label: ", reg_label, " had no data"])
     def load_saved_inputs(self, filename):
         """
         Optionally load a saved version of the input/training data patient data. Expected to have "id" as the
@@ -409,45 +412,48 @@ class RCMStats:
         # Note since not all of these values may have been included, keep only the cases that also were in the input df
         all_stats = pd.DataFrame()
         for reg_label in self.rcm[self.regulatory_label].unique():
-            encoded_data = self.encoded_df[reg_label]  # Get the pre-encoded data for these patients...
+            try:
+                encoded_data = self.encoded_df[reg_label]  # Get the pre-encoded data for these patients...
 
-            # Get it for each of the columns to align to
-            cols_to_align = ['Protein-LogFC', 'RNA-LogFC', 'CpG-LogFC']
-            cond0_cases = list(set([col for col in encoded_data.columns if col in cond0_cases_all]))
-            cond1_cases = list(set([col for col in encoded_data.columns if col in cond1_cases_all]))
+                # Get it for each of the columns to align to
+                cols_to_align = ['Protein-LogFC', 'RNA-LogFC', 'CpG-LogFC']
+                cond0_cases = list(set([col for col in encoded_data.columns if col in cond0_cases_all]))
+                cond1_cases = list(set([col for col in encoded_data.columns if col in cond1_cases_all]))
 
-            alignment_column_1_values = []
-            alignment_column_0_values = []
-            # Also we want to make sure the columns are aligned to something biologicallly meaningful, so we want
-            # to add in their "input data" so it can be aligned to this and we do this on the non-normalised data
-            raw_input_df = self.raw_input_df[reg_label]
-            for c in cols_to_align:
-                # Get the mean value for this condition
-                cols = [col for col in raw_input_df.columns if c in col and col.split('_')[0] in cond1_cases]
-                data = np.nanmean(raw_input_df[cols].values, axis=1)
-                alignment_column_1_values.append(data)
-                cols = [col for col in raw_input_df.columns if c in col and col.split('_')[0] in cond0_cases]
-                data = np.nanmean(raw_input_df[cols].values, axis=1)
-                alignment_column_0_values.append(data)
+                alignment_column_1_values = []
+                alignment_column_0_values = []
+                # Also we want to make sure the columns are aligned to something biologicallly meaningful, so we want
+                # to add in their "input data" so it can be aligned to this and we do this on the non-normalised data
+                raw_input_df = self.raw_input_df[reg_label]
+                for c in cols_to_align:
+                    # Get the mean value for this condition
+                    cols = [col for col in raw_input_df.columns if c in col and col.split('_')[0] in cond1_cases]
+                    data = np.nanmean(raw_input_df[cols].values, axis=1)
+                    alignment_column_1_values.append(data)
+                    cols = [col for col in raw_input_df.columns if c in col and col.split('_')[0] in cond0_cases]
+                    data = np.nanmean(raw_input_df[cols].values, axis=1)
+                    alignment_column_0_values.append(data)
 
-            # cond_0_encodings = {case_id: [encoded_data[case_id].values] for case_id in cond0_cases}
-            # cond_1_encodings = {case_id: [encoded_data[case_id].values] for case_id in cond1_cases}
-            stats_df = self.make_stats_df(test_type=test_type, id_vals=encoded_data['id'].values,
-                                          cond_1_encodings=encoded_data[cond1_cases],
-                                          cond_0_encodings=encoded_data[cond0_cases],
-                                          column_to_align_to=cols_to_align,
-                                          alignment_column_1_values=alignment_column_1_values,
-                                          alignment_column_0_values=alignment_column_0_values, cond0=cond0, cond1=cond1)
-            stats_df[self.regulatory_label] = reg_label
-            # Save the averages from the cols to align to as well
-            for i, c in enumerate(cols_to_align):
-                stats_df[f'{c} mean ({cond1})'] = alignment_column_1_values[i]
-                stats_df[f'{c} mean ({cond0})'] = alignment_column_0_values[i]
-                stats_df[f'{c} mean ({cond1}-{cond0})'] = alignment_column_1_values[i] - alignment_column_0_values[i]
+                # cond_0_encodings = {case_id: [encoded_data[case_id].values] for case_id in cond0_cases}
+                # cond_1_encodings = {case_id: [encoded_data[case_id].values] for case_id in cond1_cases}
+                stats_df = self.make_stats_df(test_type=test_type, id_vals=encoded_data['id'].values,
+                                              cond_1_encodings=encoded_data[cond1_cases],
+                                              cond_0_encodings=encoded_data[cond0_cases],
+                                              column_to_align_to=cols_to_align,
+                                              alignment_column_1_values=alignment_column_1_values,
+                                              alignment_column_0_values=alignment_column_0_values, cond0=cond0, cond1=cond1)
+                stats_df[self.regulatory_label] = reg_label
+                # Save the averages from the cols to align to as well
+                for i, c in enumerate(cols_to_align):
+                    stats_df[f'{c} mean ({cond1})'] = alignment_column_1_values[i]
+                    stats_df[f'{c} mean ({cond0})'] = alignment_column_0_values[i]
+                    stats_df[f'{c} mean ({cond1}-{cond0})'] = alignment_column_1_values[i] - alignment_column_0_values[i]
 
-            self.test_for_normality(stats_df[f'Integrated mean ({cond0})'], f'{reg_label} Integrated mean ({cond0})')
-            self.test_for_normality(stats_df[f'Integrated mean ({cond1})'], f'{reg_label} Integrated mean ({cond1})')
-            all_stats = pd.concat([all_stats, stats_df])
+                self.test_for_normality(stats_df[f'Integrated mean ({cond0})'], f'{reg_label} Integrated mean ({cond0})')
+                self.test_for_normality(stats_df[f'Integrated mean ({cond1})'], f'{reg_label} Integrated mean ({cond1})')
+                all_stats = pd.concat([all_stats, stats_df])
+            except:
+                self.u.warn_p(["WARNING: regulatory label, ", reg_label, " didn't have data."])
         all_stats.to_csv(f'{self.output_folder}stats_{cond1}-{cond0}_{self.run_name + label}.csv')
         return all_stats
 
@@ -592,15 +598,20 @@ class RCMStats:
                 # Now we need to filter out patients that didn't have the required matching data.
                 train_df = self.build_training_df(r_df, selected_cases=cases)
                 self.train_df[reg_label] = train_df.copy()
-                self.train(train_df, self.feature_columns, reg_label, config)
-                # Encode data with trained VAE for all patients.
-                # encoding has genes as the rows IDs and patients as the columns, so we're basically building it up
-                # for each of the patients
-                reg_encoded_df = self.get_encoding(r_df, reg_label)
-                reg_encoded_df[self.regulatory_label] = reg_label
-                # Keep track of this for quick access
-                self.encoded_df[reg_label] = reg_encoded_df
-                encoded_df = pd.concat([encoded_df, reg_encoded_df])
+                if len(train_df.values) > 20:
+                    self.train(train_df, self.feature_columns, reg_label, config)
+                    # Encode data with trained VAE for all patients.
+                    # encoding has genes as the rows IDs and patients as the columns, so we're basically building it up
+                    # for each of the patients
+                    reg_encoded_df = self.get_encoding(r_df, reg_label)
+                    reg_encoded_df[self.regulatory_label] = reg_label
+                    # Keep track of this for quick access
+                    self.encoded_df[reg_label] = reg_encoded_df
+                    encoded_df = pd.concat([encoded_df, reg_encoded_df])
+                else:
+                    self.u.warn_p(["WARNING: Regulatory clustering group ", reg_label,
+                                   " had too few values for statistics so was ommitted."])
+
         # Keep track of the patient encodings.
         return encoded_df
 
@@ -796,9 +807,17 @@ class RCMStats:
                     if include_missing:
                         cond_0_mean = self.fill_missing(df, case, sample_df, label)
                         # If it doesn't have any NA, include this otherwise ommit the data
-                        if not np.isnan(cond_0_mean).any():
+                        if len(cond_0_mean) > 0 and not np.isnan(cond_0_mean).any():
                             cond_1_values = df[cond_1_column].values
                             vae_data_df[f'{case}_{label}-Normal'] = cond_0_mean
+                            vae_data_df[f'{case}_{label}-Tumor'] = cond_1_values
+                            vae_data_df[f'{case}_{label}-LogFC'] = cond_1_values - cond_0_mean
+                        else:
+                            cond_1_values = df[cond_1_column].values
+                            self.u.err_p(["WARNING: NO DIFFERENCE VALUES FOUND YOUR COND0 MEAN WAS 0 IGNORE THIS VALUE"])
+                            print(f'{case}_{label}-Normal')
+                            self.u.err_p(["WARNING DONE."])
+                            vae_data_df[f'{case}_{label}-Normal'] = np.zeros(len(cond_1_values))
                             vae_data_df[f'{case}_{label}-Tumor'] = cond_1_values
                             vae_data_df[f'{case}_{label}-LogFC'] = cond_1_values - cond_0_mean
                 else:
