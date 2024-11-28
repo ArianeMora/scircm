@@ -2,8 +2,9 @@
 [![PyPI](https://img.shields.io/pypi/v/scircm)](https://pypi.org/project/scircm/)
 
 ## Versions: 
-1. [R version](https://github.com/ArianeMora/SiRCleR)
-2 [website](https://arianemora-sircle-web-app-ndu996.streamlit.app/)
+1. [R version](https://github.com/ArianeMora/SiRCleR)  
+2. [website](https://arianemora-sircle-web-app-ndu996.streamlit.app/)  
+3. [about page](https://github.com/ArianeMora/SiRCle_multiomics_integration)  
 
 ## Install
 Optionally create a new conda env.
@@ -19,7 +20,7 @@ See the [examples](https://github.com/ArianeMora/scircm/tree/main/examples) fold
 *If you have any troubles running the tutorial on a windows machine, please let us know and we can help to sort out any issues. 
 
 ## Issues
-Please let us know if you have any issues (ariane.n.mora@gmail.com) or via the [issues](https://github.com/ArianeMora/scircm/issues)! tab (preferred).
+Please let us know if you have any issues (ariane.n.mora@gmail.com) or via the issues tab (preferred).
 
 #### Quick version
 ```
