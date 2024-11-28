@@ -1,9 +1,9 @@
-# sci-RegulatoryClusteringModel
+# Signature Regulatory Clustering (SiRCle) python implementation
 [![PyPI](https://img.shields.io/pypi/v/scircm)](https://pypi.org/project/scircm/)
 
 ## Versions: 
-1. [R version](https://github.com/ArianeMora/SiRCleR)!
-2. [Python without VAE](https://github.com/ArianeMora/SiRClePy)!
+1. [R version](https://github.com/ArianeMora/SiRCleR)
+2 [website](https://arianemora-sircle-web-app-ndu996.streamlit.app/)
 
 ## Install
 Optionally create a new conda env.
@@ -14,7 +14,7 @@ pip install scircm
 ```
 
 ## Run
-See the [examples](https://github.com/ArianeMora/scircm/tree/main/examples)! folder for a proper tutorial with data included that you can run!
+See the [examples](https://github.com/ArianeMora/scircm/tree/main/examples) folder for a proper tutorial with data included that you can run.
 
 *If you have any troubles running the tutorial on a windows machine, please let us know and we can help to sort out any issues. 
 
@@ -57,25 +57,25 @@ df = rcm.get_df()
 ```
 
 #### Making your CpGs map to a single gene version
+
+Note you need to pass the function: 
+1) the gene ID column, here it is 'ensembl_gene_id'
+2) the padj column: here it is 'padj_meth'
+3) the logFC or test statistic column: here it is 'CpG_Beta_diff'
+
 ```
 from scircm import filter_methylation_data_by_genes
 meth_df = pd.read_csv(f'path to the output from methylation DCpG analysis file')
-# Note: you need to pass it: 
-# 1) the gene ID column, here it is 'ensembl_gene_id'
-# 2) the padj column: here it is 'padj_meth'
-# 3) the logFC or test statistic column: here it is 'CpG_Beta_diff'
 filtered_meth_df = filter_methylation_data_by_genes(meth_df, 'ensembl_gene_id', 'padj_meth', 'CpG_Beta_diff')
 ```
 
 ## Manuscript
 
-If you want to read more about how SiRCle works, please check out our paper: https://www.biorxiv.org/content/10.1101/2022.07.02.498058v1 
+If you want to read more about how SiRCle works, please check out our [paper](https://www.biorxiv.org/content/10.1101/2022.07.02.498058v1
+). 
+Our [website](https://arianemora-sircle-web-app-ndu996.streamlit.app) is under active development and currently in Beta mode - let us know if you have any issues :) 
 
-Website is available at: https://arianemora-sircle-web-app-ndu996.streamlit.app it is under active development and currently in Beta mode - let us know if you have any issues :) 
-Note the website is only for the first bit of the regulatory clustering.
-
-
-Now you can run the first version :)
+Note the website is only for the first bit of the regulatory clustering but if you want the second part (VAE) let us know.
 
 ## Quick guide on the regulation grouping levels
 
@@ -106,12 +106,6 @@ The background options included are:
 
 ## Issues
 
-### Note on Mac M1
-Unfortunately, the Mac M1 has some issues with tensorflow, so we have not been able to get our package to work on a M1 
-mac yet. If you get it working please let us know your solution as others may benefit! We have a partial M1 version
-(that covers the regulatory clustering) but doesn't enable the group statistics, if you are only interested in part 1 
-of SiRCle please go here: https://github.com/ArianeMora/SiRCle_M1
-
 ### Note on Windows
 We have tested our code on Windows (10) and Mac (pro) computers, I'm not sure how it would go on a Windows 7 machine so 
 if you have issues post an issue.
@@ -131,8 +125,9 @@ Note we expect python 3.8 so if things don't work first time, check you're runni
 
 The general table of how we define regulatory clusters.
 
-Please post questions and issues related to sci-rcm on the `Issues <https://github.com/ArianeMora/scircm/issues>`_  section of the GitHub repository.
+Please post questions and issues related to sci-rcm on the [Issues](https://github.com/ArianeMora/scircm/issues) 
+section of the GitHub repository.
 
 
 ## Cite
-If you use this please cite our manuscript: https://www.biorxiv.org/content/10.1101/2022.07.02.498058v1 
+If you use this please cite our [manuscript](https://www.biorxiv.org/content/10.1101/2022.07.02.498058v1).
