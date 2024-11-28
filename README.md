@@ -1,7 +1,7 @@
 # Signature Regulatory Clustering (SiRCle) python implementation
 [![PyPI](https://img.shields.io/pypi/v/scircm)](https://pypi.org/project/scircm/)
 
-## Versions: 
+## Versions
 1. [R version](https://github.com/ArianeMora/SiRCleR)  
 2. [website](https://arianemora-sircle-web-app-ndu996.streamlit.app/)  
 3. [about page](https://github.com/ArianeMora/SiRCle_multiomics_integration)  
